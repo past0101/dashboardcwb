@@ -1,4 +1,5 @@
 import { Appointment } from '@/lib/types';
+import { sendAppointmentNotification } from '@/lib/api/twilio';
 
 export interface TwilioConfig {
   accountSid: string;
@@ -21,32 +22,8 @@ export const sendAppointmentSMS = async (
   message: string,
   config: TwilioConfig
 ): Promise<{ success: boolean; message: string }> => {
-  try {
-    // In a production environment, this would use the Twilio SDK
-    // For now, we're just simulating the API call
-    
-    const response = await fetch('/api/send-sms', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        appointment,
-        phoneNumber,
-        message,
-        config,
-      }),
-    });
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error sending SMS:', error);
-    return {
-      success: false,
-      message: 'Παρουσιάστηκε σφάλμα κατά την αποστολή SMS',
-    };
-  }
+  // Using the API wrapper to send the SMS
+  return sendAppointmentNotification(appointment, phoneNumber, message, config);
 };
 
 /**

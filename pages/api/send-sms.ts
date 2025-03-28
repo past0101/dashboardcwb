@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { TwilioConfig } from '@/utils/notification';
+import twilio from 'twilio';
 
 type ResponseData = {
   success: boolean;
@@ -33,25 +34,29 @@ export default async function handler(
       });
     }
 
-    // Here we would use the Twilio SDK in a real environment
-    // For now, we'll simulate a successful response
-    
-    // In a real implementation, this would be:
-    // const client = new twilio(config.accountSid, config.authToken);
-    // const twilioMessage = await client.messages.create({
-    //   body: message,
-    //   from: config.phoneNumber,
-    //   to: phoneNumber
-    // });
+    try {
+      // Initialize the Twilio client with the provided credentials
+      const client = twilio(config.accountSid, config.authToken);
+      
+      // Send the SMS message
+      const twilioMessage = await client.messages.create({
+        body: message,
+        from: config.phoneNumber,
+        to: phoneNumber
+      });
 
-    // Simulate a successful message send
-    const messageId = 'SM' + Math.random().toString(36).substring(2, 15);
-
-    return res.status(200).json({
-      success: true,
-      message: 'Το μήνυμα SMS στάλθηκε με επιτυχία',
-      messageId
-    });
+      return res.status(200).json({
+        success: true,
+        message: 'Το μήνυμα SMS στάλθηκε με επιτυχία',
+        messageId: twilioMessage.sid
+      });
+    } catch (twilioError: any) {
+      console.error('Twilio error:', twilioError);
+      return res.status(400).json({
+        success: false,
+        message: `Σφάλμα Twilio: ${twilioError.message || 'Άγνωστο σφάλμα Twilio'}`
+      });
+    }
   } catch (error: any) {
     console.error('Error sending SMS:', error);
     return res.status(500).json({
