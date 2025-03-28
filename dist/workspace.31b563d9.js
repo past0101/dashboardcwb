@@ -53239,6 +53239,6 @@ $RefreshReg$(_c, "Settings");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","../context/DataContext":"81YM4","../context/ThemeContext":"71aLX","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}]},["5fbZm","a0t4e"], "a0t4e", "parcelRequire013b", null, null, "http://localhost:5000")
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","../context/DataContext":"81YM4","../context/ThemeContext":"71aLX","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}]},["5fbZm","a0t4e"], "a0t4e", "parcelRequire013b", null, null, "http://0.0.0.0:5000")
 
 //# sourceMappingURL=workspace.31b563d9.js.map
