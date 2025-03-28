@@ -3,7 +3,7 @@ import { useData } from '../context/DataContext';
 import Chart from 'chart.js/auto';
 
 const Statistics = () => {
-  const { services, appointments, sales, customers } = useData();
+  const { services, appointments, sales, customers, staff } = useData();
   const [timeRange, setTimeRange] = useState('month'); // month, quarter, year
   const topServicesChartRef = useRef(null);
   const employeePerformanceChartRef = useRef(null);
@@ -37,8 +37,6 @@ const Statistics = () => {
 
   // Calculate employee performance
   const getEmployeePerformanceStats = () => {
-    const { staff } = useData();
-    
     // Count sales by employee
     const salesByEmployee = {};
     sales.forEach(sale => {
@@ -283,7 +281,7 @@ const Statistics = () => {
         if (chart) chart.destroy();
       });
     };
-  }, [services, appointments, sales, timeRange]);
+  }, [services, appointments, sales, staff, timeRange]);
 
   // Calculate summary statistics
   const getTotalRevenue = () => {

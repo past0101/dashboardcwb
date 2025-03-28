@@ -50109,8 +50109,7 @@ var _autoDefault = parcelHelpers.interopDefault(_auto);
 var _s = $RefreshSig$();
 const Statistics = ()=>{
     _s();
-    var _s1 = $RefreshSig$();
-    const { services, appointments, sales, customers } = (0, _dataContext.useData)();
+    const { services, appointments, sales, customers, staff } = (0, _dataContext.useData)();
     const [timeRange, setTimeRange] = (0, _react.useState)('month'); // month, quarter, year
     const topServicesChartRef = (0, _react.useRef)(null);
     const employeePerformanceChartRef = (0, _react.useRef)(null);
@@ -50137,8 +50136,6 @@ const Statistics = ()=>{
     };
     // Calculate employee performance
     const getEmployeePerformanceStats = ()=>{
-        _s1();
-        const { staff } = (0, _dataContext.useData)();
         // Count sales by employee
         const salesByEmployee = {};
         sales.forEach((sale)=>{
@@ -50154,11 +50151,6 @@ const Statistics = ()=>{
             })).sort((a, b)=>b.amount - a.amount);
         return employeePerformance;
     };
-    _s1(getEmployeePerformanceStats, "RIlIqwMBRDd7rGrbneRzu/cjnmU=", false, function() {
-        return [
-            (0, _dataContext.useData)
-        ];
-    });
     // Calculate customer retention stats
     const getCustomerRetentionStats = ()=>{
         // Count appointments per customer
@@ -50385,6 +50377,7 @@ const Statistics = ()=>{
         services,
         appointments,
         sales,
+        staff,
         timeRange
     ]);
     // Calculate summary statistics
@@ -50410,7 +50403,7 @@ const Statistics = ()=>{
                         children: "\u03A3\u03C4\u03B1\u03C4\u03B9\u03C3\u03C4\u03B9\u03BA\u03AC"
                     }, void 0, false, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 306,
+                        lineNumber: 304,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50422,7 +50415,7 @@ const Statistics = ()=>{
                                 children: "\u039C\u03AE\u03BD\u03B1\u03C2"
                             }, void 0, false, {
                                 fileName: "src/pages/Statistics.jsx",
-                                lineNumber: 309,
+                                lineNumber: 307,
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -50431,7 +50424,7 @@ const Statistics = ()=>{
                                 children: "\u03A4\u03C1\u03AF\u03BC\u03B7\u03BD\u03BF"
                             }, void 0, false, {
                                 fileName: "src/pages/Statistics.jsx",
-                                lineNumber: 317,
+                                lineNumber: 315,
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -50440,19 +50433,19 @@ const Statistics = ()=>{
                                 children: "\u0388\u03C4\u03BF\u03C2"
                             }, void 0, false, {
                                 fileName: "src/pages/Statistics.jsx",
-                                lineNumber: 325,
+                                lineNumber: 323,
                                 columnNumber: 11
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 308,
+                        lineNumber: 306,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/pages/Statistics.jsx",
-                lineNumber: 305,
+                lineNumber: 303,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50469,12 +50462,12 @@ const Statistics = ()=>{
                                         className: "fas fa-euro-sign text-xl"
                                     }, void 0, false, {
                                         fileName: "src/pages/Statistics.jsx",
-                                        lineNumber: 341,
+                                        lineNumber: 339,
                                         columnNumber: 15
                                     }, undefined)
                                 }, void 0, false, {
                                     fileName: "src/pages/Statistics.jsx",
-                                    lineNumber: 340,
+                                    lineNumber: 338,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50484,7 +50477,7 @@ const Statistics = ()=>{
                                             children: "\u03A3\u03C5\u03BD\u03BF\u03BB\u03B9\u03BA\u03AC \u0388\u03C3\u03BF\u03B4\u03B1"
                                         }, void 0, false, {
                                             fileName: "src/pages/Statistics.jsx",
-                                            lineNumber: 344,
+                                            lineNumber: 342,
                                             columnNumber: 15
                                         }, undefined),
                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -50495,24 +50488,24 @@ const Statistics = ()=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "src/pages/Statistics.jsx",
-                                            lineNumber: 345,
+                                            lineNumber: 343,
                                             columnNumber: 15
                                         }, undefined)
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/pages/Statistics.jsx",
-                                    lineNumber: 343,
+                                    lineNumber: 341,
                                     columnNumber: 13
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "src/pages/Statistics.jsx",
-                            lineNumber: 339,
+                            lineNumber: 337,
                             columnNumber: 11
                         }, undefined)
                     }, void 0, false, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 338,
+                        lineNumber: 336,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50526,12 +50519,12 @@ const Statistics = ()=>{
                                         className: "fas fa-calendar-check text-xl"
                                     }, void 0, false, {
                                         fileName: "src/pages/Statistics.jsx",
-                                        lineNumber: 353,
+                                        lineNumber: 351,
                                         columnNumber: 15
                                     }, undefined)
                                 }, void 0, false, {
                                     fileName: "src/pages/Statistics.jsx",
-                                    lineNumber: 352,
+                                    lineNumber: 350,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50541,7 +50534,7 @@ const Statistics = ()=>{
                                             children: "\u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD"
                                         }, void 0, false, {
                                             fileName: "src/pages/Statistics.jsx",
-                                            lineNumber: 356,
+                                            lineNumber: 354,
                                             columnNumber: 15
                                         }, undefined),
                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -50549,24 +50542,24 @@ const Statistics = ()=>{
                                             children: getTotalAppointments()
                                         }, void 0, false, {
                                             fileName: "src/pages/Statistics.jsx",
-                                            lineNumber: 357,
+                                            lineNumber: 355,
                                             columnNumber: 15
                                         }, undefined)
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/pages/Statistics.jsx",
-                                    lineNumber: 355,
+                                    lineNumber: 353,
                                     columnNumber: 13
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "src/pages/Statistics.jsx",
-                            lineNumber: 351,
+                            lineNumber: 349,
                             columnNumber: 11
                         }, undefined)
                     }, void 0, false, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 350,
+                        lineNumber: 348,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50580,12 +50573,12 @@ const Statistics = ()=>{
                                         className: "fas fa-receipt text-xl"
                                     }, void 0, false, {
                                         fileName: "src/pages/Statistics.jsx",
-                                        lineNumber: 365,
+                                        lineNumber: 363,
                                         columnNumber: 15
                                     }, undefined)
                                 }, void 0, false, {
                                     fileName: "src/pages/Statistics.jsx",
-                                    lineNumber: 364,
+                                    lineNumber: 362,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50595,7 +50588,7 @@ const Statistics = ()=>{
                                             children: "\u039C\u03AD\u03C3\u03B7 \u0391\u03BE\u03AF\u03B1"
                                         }, void 0, false, {
                                             fileName: "src/pages/Statistics.jsx",
-                                            lineNumber: 368,
+                                            lineNumber: 366,
                                             columnNumber: 15
                                         }, undefined),
                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -50606,30 +50599,30 @@ const Statistics = ()=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "src/pages/Statistics.jsx",
-                                            lineNumber: 369,
+                                            lineNumber: 367,
                                             columnNumber: 15
                                         }, undefined)
                                     ]
                                 }, void 0, true, {
                                     fileName: "src/pages/Statistics.jsx",
-                                    lineNumber: 367,
+                                    lineNumber: 365,
                                     columnNumber: 13
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "src/pages/Statistics.jsx",
-                            lineNumber: 363,
+                            lineNumber: 361,
                             columnNumber: 11
                         }, undefined)
                     }, void 0, false, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 362,
+                        lineNumber: 360,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/pages/Statistics.jsx",
-                lineNumber: 337,
+                lineNumber: 335,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50645,17 +50638,17 @@ const Statistics = ()=>{
                                 ref: topServicesChartRef
                             }, void 0, false, {
                                 fileName: "src/pages/Statistics.jsx",
-                                lineNumber: 379,
+                                lineNumber: 377,
                                 columnNumber: 13
                             }, undefined)
                         }, void 0, false, {
                             fileName: "src/pages/Statistics.jsx",
-                            lineNumber: 378,
+                            lineNumber: 376,
                             columnNumber: 11
                         }, undefined)
                     }, void 0, false, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 377,
+                        lineNumber: 375,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50668,17 +50661,17 @@ const Statistics = ()=>{
                                 ref: employeePerformanceChartRef
                             }, void 0, false, {
                                 fileName: "src/pages/Statistics.jsx",
-                                lineNumber: 385,
+                                lineNumber: 383,
                                 columnNumber: 13
                             }, undefined)
                         }, void 0, false, {
                             fileName: "src/pages/Statistics.jsx",
-                            lineNumber: 384,
+                            lineNumber: 382,
                             columnNumber: 11
                         }, undefined)
                     }, void 0, false, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 383,
+                        lineNumber: 381,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50691,17 +50684,17 @@ const Statistics = ()=>{
                                 ref: customerRetentionChartRef
                             }, void 0, false, {
                                 fileName: "src/pages/Statistics.jsx",
-                                lineNumber: 391,
+                                lineNumber: 389,
                                 columnNumber: 13
                             }, undefined)
                         }, void 0, false, {
                             fileName: "src/pages/Statistics.jsx",
-                            lineNumber: 390,
+                            lineNumber: 388,
                             columnNumber: 11
                         }, undefined)
                     }, void 0, false, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 389,
+                        lineNumber: 387,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50714,23 +50707,23 @@ const Statistics = ()=>{
                                 ref: salesByWeekdayChartRef
                             }, void 0, false, {
                                 fileName: "src/pages/Statistics.jsx",
-                                lineNumber: 397,
+                                lineNumber: 395,
                                 columnNumber: 13
                             }, undefined)
                         }, void 0, false, {
                             fileName: "src/pages/Statistics.jsx",
-                            lineNumber: 396,
+                            lineNumber: 394,
                             columnNumber: 11
                         }, undefined)
                     }, void 0, false, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 395,
+                        lineNumber: 393,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/pages/Statistics.jsx",
-                lineNumber: 376,
+                lineNumber: 374,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50741,7 +50734,7 @@ const Statistics = ()=>{
                         children: "\u0395\u03C0\u03B9\u03C0\u03BB\u03AD\u03BF\u03BD \u03A3\u03C4\u03B1\u03C4\u03B9\u03C3\u03C4\u03B9\u03BA\u03AC"
                     }, void 0, false, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 404,
+                        lineNumber: 402,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50755,7 +50748,7 @@ const Statistics = ()=>{
                                         children: "\u03A3\u03C5\u03BD\u03BF\u03BB\u03B9\u03BA\u03BF\u03AF \u03A0\u03B5\u03BB\u03AC\u03C4\u03B5\u03C2"
                                     }, void 0, false, {
                                         fileName: "src/pages/Statistics.jsx",
-                                        lineNumber: 408,
+                                        lineNumber: 406,
                                         columnNumber: 13
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -50763,13 +50756,13 @@ const Statistics = ()=>{
                                         children: customers.length
                                     }, void 0, false, {
                                         fileName: "src/pages/Statistics.jsx",
-                                        lineNumber: 409,
+                                        lineNumber: 407,
                                         columnNumber: 13
                                     }, undefined)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/pages/Statistics.jsx",
-                                lineNumber: 407,
+                                lineNumber: 405,
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50780,7 +50773,7 @@ const Statistics = ()=>{
                                         children: "\u039C\u03AD\u03C3\u03BF\u03C2 \u038C\u03C1\u03BF\u03C2 \u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD \u03B1\u03BD\u03AC \u03A0\u03B5\u03BB\u03AC\u03C4\u03B7"
                                     }, void 0, false, {
                                         fileName: "src/pages/Statistics.jsx",
-                                        lineNumber: 413,
+                                        lineNumber: 411,
                                         columnNumber: 13
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -50788,13 +50781,13 @@ const Statistics = ()=>{
                                         children: (appointments.length / (customers.length || 1)).toFixed(1)
                                     }, void 0, false, {
                                         fileName: "src/pages/Statistics.jsx",
-                                        lineNumber: 414,
+                                        lineNumber: 412,
                                         columnNumber: 13
                                     }, undefined)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/pages/Statistics.jsx",
-                                lineNumber: 412,
+                                lineNumber: 410,
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -50804,7 +50797,7 @@ const Statistics = ()=>{
                                         children: "\u0395\u03C0\u03B9\u03C3\u03BA\u03B5\u03C8\u03B9\u03BC\u03CC\u03C4\u03B7\u03C4\u03B1 \u03C4\u03C1\u03AD\u03C7\u03BF\u03BD\u03C4\u03BF\u03C2 \u03BC\u03AE\u03BD\u03B1"
                                     }, void 0, false, {
                                         fileName: "src/pages/Statistics.jsx",
-                                        lineNumber: 420,
+                                        lineNumber: 418,
                                         columnNumber: 13
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -50816,35 +50809,35 @@ const Statistics = ()=>{
                                         })()
                                     }, void 0, false, {
                                         fileName: "src/pages/Statistics.jsx",
-                                        lineNumber: 421,
+                                        lineNumber: 419,
                                         columnNumber: 13
                                     }, undefined)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/pages/Statistics.jsx",
-                                lineNumber: 419,
+                                lineNumber: 417,
                                 columnNumber: 11
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/pages/Statistics.jsx",
-                        lineNumber: 406,
+                        lineNumber: 404,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/pages/Statistics.jsx",
-                lineNumber: 403,
+                lineNumber: 401,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/pages/Statistics.jsx",
-        lineNumber: 304,
+        lineNumber: 302,
         columnNumber: 5
     }, undefined);
 };
-_s(Statistics, "l0OlE5V38jySchgTcsXyoYtC+Ao=", false, function() {
+_s(Statistics, "DFS7BEBqvAOwwGmRPyfGB6gCoRU=", false, function() {
     return [
         (0, _dataContext.useData)
     ];
