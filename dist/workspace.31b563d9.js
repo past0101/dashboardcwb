@@ -28092,6 +28092,8 @@ const Dashboard = ()=>{
     const [salesData, setSalesData] = (0, _react.useState)([]);
     const [appointmentsData, setAppointmentsData] = (0, _react.useState)([]);
     const [todayAppointments, setTodayAppointments] = (0, _react.useState)([]);
+    const [loading, setLoading] = (0, _react.useState)(true);
+    const [error, setError] = (0, _react.useState)(null);
     const [stats, setStats] = (0, _react.useState)({
         totalCustomers: 0,
         totalSales: 0,
@@ -28100,34 +28102,46 @@ const Dashboard = ()=>{
         lowStockProducts: 0
     });
     (0, _react.useEffect)(()=>{
-        // Get sales data for chart
-        setSalesData((0, _mockData.getMonthlySalesData)());
-        // Get appointments data for chart
-        setAppointmentsData((0, _mockData.getWeeklyAppointmentsData)());
-        // Get today's appointments
-        const today = new Date();
-        const startOfDay = new Date(today);
-        startOfDay.setHours(0, 0, 0, 0);
-        const endOfDay = new Date(today);
-        endOfDay.setHours(23, 59, 59, 999);
-        const todaysApps = appointments.filter((app)=>{
-            const appDate = new Date(app.date);
-            return appDate >= startOfDay && appDate <= endOfDay;
-        });
-        setTodayAppointments(todaysApps);
-        // Calculate statistics
-        const totalCustomersCount = customers.length;
-        const totalSalesAmount = sales.reduce((sum, sale)=>sum + sale.total, 0);
-        const totalAppointmentsCount = appointments.length;
-        const pendingAppointmentsCount = appointments.filter((app)=>app.status === 'pending').length;
-        const lowStockProductsCount = products.filter((product)=>product.stock < 10).length;
-        setStats({
-            totalCustomers: totalCustomersCount,
-            totalSales: totalSalesAmount,
-            totalAppointments: totalAppointmentsCount,
-            pendingAppointments: pendingAppointmentsCount,
-            lowStockProducts: lowStockProductsCount
-        });
+        try {
+            setLoading(true);
+            setError(null);
+            // Get sales data for chart
+            const salesChartData = (0, _mockData.getMonthlySalesData)();
+            setSalesData(salesChartData);
+            // Get appointments data for chart
+            const appointmentsChartData = (0, _mockData.getWeeklyAppointmentsData)();
+            setAppointmentsData(appointmentsChartData);
+            // Get today's appointments
+            const today = new Date();
+            const startOfDay = new Date(today);
+            startOfDay.setHours(0, 0, 0, 0);
+            const endOfDay = new Date(today);
+            endOfDay.setHours(23, 59, 59, 999);
+            const todaysApps = appointments ? appointments.filter((app)=>{
+                if (!app.date) return false;
+                const appDate = new Date(app.date);
+                return appDate >= startOfDay && appDate <= endOfDay;
+            }) : [];
+            setTodayAppointments(todaysApps);
+            // Calculate statistics
+            const totalCustomersCount = customers ? customers.length : 0;
+            const totalSalesAmount = sales ? sales.reduce((sum, sale)=>sum + (sale.total || 0), 0) : 0;
+            const totalAppointmentsCount = appointments ? appointments.length : 0;
+            const pendingAppointmentsCount = appointments ? appointments.filter((app)=>app.status === 'pending').length : 0;
+            const lowStockProductsCount = products ? products.filter((product)=>product.stock < 10).length : 0;
+            setStats({
+                totalCustomers: totalCustomersCount,
+                totalSales: totalSalesAmount,
+                totalAppointments: totalAppointmentsCount,
+                pendingAppointments: pendingAppointmentsCount,
+                lowStockProducts: lowStockProductsCount
+            });
+            setLoading(false);
+        } catch (err) {
+            console.error("Error loading dashboard data:", err);
+            setError("\u03A0\u03B1\u03C1\u03BF\u03C5\u03C3\u03B9\u03AC\u03C3\u03C4\u03B7\u03BA\u03B5 \u03C3\u03C6\u03AC\u03BB\u03BC\u03B1 \u03BA\u03B1\u03C4\u03AC \u03C4\u03B7 \u03C6\u03CC\u03C1\u03C4\u03C9\u03C3\u03B7 \u03C4\u03C9\u03BD \u03B4\u03B5\u03B4\u03BF\u03BC\u03AD\u03BD\u03C9\u03BD");
+            setLoading(false);
+        }
     }, [
         appointments,
         customers,
@@ -28136,12 +28150,14 @@ const Dashboard = ()=>{
     ]);
     // Helper function to get service name by ID
     const getServiceName = (serviceId)=>{
-        const service = services.find((s)=>s.id === serviceId);
+        if (!services) return "\u0386\u03B3\u03BD\u03C9\u03C3\u03C4\u03B7 \u03C5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1";
+        const service = services.find((s)=>s && s.id === serviceId);
         return service ? service.name : "\u0386\u03B3\u03BD\u03C9\u03C3\u03C4\u03B7 \u03C5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1";
     };
     // Helper function to get customer name by ID
     const getCustomerName = (customerId)=>{
-        const customer = customers.find((c)=>c.id === customerId);
+        if (!customers) return "\u0386\u03B3\u03BD\u03C9\u03C3\u03C4\u03BF\u03C2 \u03C0\u03B5\u03BB\u03AC\u03C4\u03B7\u03C2";
+        const customer = customers.find((c)=>c && c.id === customerId);
         return customer ? customer.name : "\u0386\u03B3\u03BD\u03C9\u03C3\u03C4\u03BF\u03C2 \u03C0\u03B5\u03BB\u03AC\u03C4\u03B7\u03C2";
     };
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -28152,426 +28168,502 @@ const Dashboard = ()=>{
                 children: "\u03A3\u03C4\u03B1\u03C4\u03B9\u03C3\u03C4\u03B9\u03BA\u03AC \u0395\u03C0\u03B9\u03C3\u03BA\u03CC\u03C0\u03B7\u03C3\u03B7\u03C2"
             }, void 0, false, {
                 fileName: "src/pages/Dashboard.jsx",
-                lineNumber: 72,
+                lineNumber: 91,
                 columnNumber: 7
             }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6",
+            error && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6",
+                role: "alert",
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                    children: error
+                }, void 0, false, {
+                    fileName: "src/pages/Dashboard.jsx",
+                    lineNumber: 95,
+                    columnNumber: 11
+                }, undefined)
+            }, void 0, false, {
+                fileName: "src/pages/Dashboard.jsx",
+                lineNumber: 94,
+                columnNumber: 9
+            }, undefined),
+            loading ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "flex items-center justify-center h-64",
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                    className: "text-center",
+                    children: [
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("i", {
+                            className: "fas fa-spinner fa-spin text-blue-500 text-3xl mb-4"
+                        }, void 0, false, {
+                            fileName: "src/pages/Dashboard.jsx",
+                            lineNumber: 102,
+                            columnNumber: 13
+                        }, undefined),
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                            children: "\u03A6\u03CC\u03C1\u03C4\u03C9\u03C3\u03B7 \u03B4\u03B5\u03B4\u03BF\u03BC\u03AD\u03BD\u03C9\u03BD..."
+                        }, void 0, false, {
+                            fileName: "src/pages/Dashboard.jsx",
+                            lineNumber: 103,
+                            columnNumber: 13
+                        }, undefined)
+                    ]
+                }, void 0, true, {
+                    fileName: "src/pages/Dashboard.jsx",
+                    lineNumber: 101,
+                    columnNumber: 11
+                }, undefined)
+            }, void 0, false, {
+                fileName: "src/pages/Dashboard.jsx",
+                lineNumber: 100,
+                columnNumber: 9
+            }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
                 children: [
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "card p-4",
+                        className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6",
                         children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                                className: "text-lg font-semibold mb-1",
-                                children: "\u03A0\u03B5\u03BB\u03AC\u03C4\u03B5\u03C2"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 77,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-3xl font-bold",
-                                children: stats.totalCustomers
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 78,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-sm text-gray-500",
-                                children: "\u03A3\u03CD\u03BD\u03BF\u03BB\u03BF \u03B5\u03B3\u03B3\u03B5\u03B3\u03C1\u03B1\u03BC\u03BC\u03AD\u03BD\u03C9\u03BD"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 79,
-                                columnNumber: 11
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 76,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "card p-4",
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                                className: "text-lg font-semibold mb-1",
-                                children: "\u03A0\u03C9\u03BB\u03AE\u03C3\u03B5\u03B9\u03C2"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 83,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-3xl font-bold",
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "card p-4",
                                 children: [
-                                    stats.totalSales.toFixed(2),
-                                    "\u20AC"
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
+                                        className: "text-lg font-semibold mb-1",
+                                        children: "\u03A0\u03B5\u03BB\u03AC\u03C4\u03B5\u03C2"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 111,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-3xl font-bold",
+                                        children: stats.totalCustomers
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 112,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-sm text-gray-500",
+                                        children: "\u03A3\u03CD\u03BD\u03BF\u03BB\u03BF \u03B5\u03B3\u03B3\u03B5\u03B3\u03C1\u03B1\u03BC\u03BC\u03AD\u03BD\u03C9\u03BD"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 113,
+                                        columnNumber: 15
+                                    }, undefined)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 84,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-sm text-gray-500",
-                                children: "\u03A3\u03C5\u03BD\u03BF\u03BB\u03B9\u03BA\u03AC \u03AD\u03C3\u03BF\u03B4\u03B1"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 85,
-                                columnNumber: 11
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 82,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "card p-4",
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                                className: "text-lg font-semibold mb-1",
-                                children: "\u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 89,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-3xl font-bold",
-                                children: stats.totalAppointments
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 90,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-sm text-gray-500",
-                                children: "\u03A3\u03C5\u03BD\u03BF\u03BB\u03B9\u03BA\u03AC \u03C1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 91,
-                                columnNumber: 11
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 88,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "card p-4",
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                                className: "text-lg font-semibold mb-1",
-                                children: "\u03A3\u03B5 \u03B1\u03BD\u03B1\u03BC\u03BF\u03BD\u03AE"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 95,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-3xl font-bold",
-                                children: stats.pendingAppointments
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 96,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-sm text-gray-500",
-                                children: "\u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD \u03C0\u03C1\u03BF\u03C2 \u03B5\u03C0\u03B9\u03B2\u03B5\u03B2\u03B1\u03AF\u03C9\u03C3\u03B7"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 97,
-                                columnNumber: 11
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 94,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "card p-4",
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                                className: "text-lg font-semibold mb-1",
-                                children: "\u03A7\u03B1\u03BC\u03B7\u03BB\u03CC \u03B1\u03C0\u03CC\u03B8\u03B5\u03BC\u03B1"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 101,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-3xl font-bold",
-                                children: stats.lowStockProducts
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 102,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-sm text-gray-500",
-                                children: "\u03A0\u03C1\u03BF\u03CA\u03CC\u03BD\u03C4\u03B1 \u03C0\u03BF\u03C5 \u03C7\u03C1\u03B5\u03B9\u03AC\u03B6\u03BF\u03BD\u03C4\u03B1\u03B9 \u03B1\u03BD\u03B1\u03BD\u03AD\u03C9\u03C3\u03B7"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 103,
-                                columnNumber: 11
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 100,
-                        columnNumber: 9
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/pages/Dashboard.jsx",
-                lineNumber: 75,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6",
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "card p-4",
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                                className: "text-lg font-semibold mb-4",
-                                children: "\u03A0\u03C9\u03BB\u03AE\u03C3\u03B5\u03B9\u03C2 \u03B1\u03BD\u03AC \u03BC\u03AE\u03BD\u03B1"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
                                 lineNumber: 110,
-                                columnNumber: 11
+                                columnNumber: 13
                             }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _salesChartDefault.default), {
-                                data: salesData
-                            }, void 0, false, {
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "card p-4",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
+                                        className: "text-lg font-semibold mb-1",
+                                        children: "\u03A0\u03C9\u03BB\u03AE\u03C3\u03B5\u03B9\u03C2"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 117,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-3xl font-bold",
+                                        children: [
+                                            stats.totalSales.toFixed(2),
+                                            "\u20AC"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 118,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-sm text-gray-500",
+                                        children: "\u03A3\u03C5\u03BD\u03BF\u03BB\u03B9\u03BA\u03AC \u03AD\u03C3\u03BF\u03B4\u03B1"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 119,
+                                        columnNumber: 15
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
                                 fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 111,
-                                columnNumber: 11
+                                lineNumber: 116,
+                                columnNumber: 13
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "card p-4",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
+                                        className: "text-lg font-semibold mb-1",
+                                        children: "\u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 123,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-3xl font-bold",
+                                        children: stats.totalAppointments
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 124,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-sm text-gray-500",
+                                        children: "\u03A3\u03C5\u03BD\u03BF\u03BB\u03B9\u03BA\u03AC \u03C1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 125,
+                                        columnNumber: 15
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/pages/Dashboard.jsx",
+                                lineNumber: 122,
+                                columnNumber: 13
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "card p-4",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
+                                        className: "text-lg font-semibold mb-1",
+                                        children: "\u03A3\u03B5 \u03B1\u03BD\u03B1\u03BC\u03BF\u03BD\u03AE"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 129,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-3xl font-bold",
+                                        children: stats.pendingAppointments
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 130,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-sm text-gray-500",
+                                        children: "\u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD \u03C0\u03C1\u03BF\u03C2 \u03B5\u03C0\u03B9\u03B2\u03B5\u03B2\u03B1\u03AF\u03C9\u03C3\u03B7"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 131,
+                                        columnNumber: 15
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/pages/Dashboard.jsx",
+                                lineNumber: 128,
+                                columnNumber: 13
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "card p-4",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
+                                        className: "text-lg font-semibold mb-1",
+                                        children: "\u03A7\u03B1\u03BC\u03B7\u03BB\u03CC \u03B1\u03C0\u03CC\u03B8\u03B5\u03BC\u03B1"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 135,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-3xl font-bold",
+                                        children: stats.lowStockProducts
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 136,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-sm text-gray-500",
+                                        children: "\u03A0\u03C1\u03BF\u03CA\u03CC\u03BD\u03C4\u03B1 \u03C0\u03BF\u03C5 \u03C7\u03C1\u03B5\u03B9\u03AC\u03B6\u03BF\u03BD\u03C4\u03B1\u03B9 \u03B1\u03BD\u03B1\u03BD\u03AD\u03C9\u03C3\u03B7"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 137,
+                                        columnNumber: 15
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/pages/Dashboard.jsx",
+                                lineNumber: 134,
+                                columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/pages/Dashboard.jsx",
                         lineNumber: 109,
-                        columnNumber: 9
+                        columnNumber: 11
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                        className: "grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6",
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "card p-4",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
+                                        className: "text-lg font-semibold mb-4",
+                                        children: "\u03A0\u03C9\u03BB\u03AE\u03C3\u03B5\u03B9\u03C2 \u03B1\u03BD\u03AC \u03BC\u03AE\u03BD\u03B1"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 144,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    salesData && salesData.length > 0 ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _salesChartDefault.default), {
+                                        data: salesData
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 146,
+                                        columnNumber: 17
+                                    }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                        className: "flex items-center justify-center h-64 bg-gray-100 rounded",
+                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                            className: "text-gray-500",
+                                            children: "\u0394\u03B5\u03BD \u03C5\u03C0\u03AC\u03C1\u03C7\u03BF\u03C5\u03BD \u03B4\u03B5\u03B4\u03BF\u03BC\u03AD\u03BD\u03B1 \u03C0\u03C9\u03BB\u03AE\u03C3\u03B5\u03C9\u03BD"
+                                        }, void 0, false, {
+                                            fileName: "src/pages/Dashboard.jsx",
+                                            lineNumber: 149,
+                                            columnNumber: 19
+                                        }, undefined)
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 148,
+                                        columnNumber: 17
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/pages/Dashboard.jsx",
+                                lineNumber: 143,
+                                columnNumber: 13
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "card p-4",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
+                                        className: "text-lg font-semibold mb-4",
+                                        children: "\u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD \u03B1\u03BD\u03AC \u03B7\u03BC\u03AD\u03C1\u03B1"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 155,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    appointmentsData && appointmentsData.length > 0 ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _appointmentsChartDefault.default), {
+                                        data: appointmentsData
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 157,
+                                        columnNumber: 17
+                                    }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                        className: "flex items-center justify-center h-64 bg-gray-100 rounded",
+                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                            className: "text-gray-500",
+                                            children: "\u0394\u03B5\u03BD \u03C5\u03C0\u03AC\u03C1\u03C7\u03BF\u03C5\u03BD \u03B4\u03B5\u03B4\u03BF\u03BC\u03AD\u03BD\u03B1 \u03C1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD"
+                                        }, void 0, false, {
+                                            fileName: "src/pages/Dashboard.jsx",
+                                            lineNumber: 160,
+                                            columnNumber: 19
+                                        }, undefined)
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 159,
+                                        columnNumber: 17
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/pages/Dashboard.jsx",
+                                lineNumber: 154,
+                                columnNumber: 13
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/pages/Dashboard.jsx",
+                        lineNumber: 142,
+                        columnNumber: 11
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                        className: "card p-4 mb-6",
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
+                                className: "text-lg font-semibold mb-4",
+                                children: "\u03A3\u03B7\u03BC\u03B5\u03C1\u03B9\u03BD\u03AC \u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD"
+                            }, void 0, false, {
+                                fileName: "src/pages/Dashboard.jsx",
+                                lineNumber: 168,
+                                columnNumber: 13
+                            }, undefined),
+                            todayAppointments && todayAppointments.length > 0 ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "table-container",
+                                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("table", {
+                                    className: "w-full",
+                                    children: [
+                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("thead", {
+                                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tr", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                                        children: "\u038F\u03C1\u03B1"
+                                                    }, void 0, false, {
+                                                        fileName: "src/pages/Dashboard.jsx",
+                                                        lineNumber: 174,
+                                                        columnNumber: 23
+                                                    }, undefined),
+                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                                        children: "\u03A0\u03B5\u03BB\u03AC\u03C4\u03B7\u03C2"
+                                                    }, void 0, false, {
+                                                        fileName: "src/pages/Dashboard.jsx",
+                                                        lineNumber: 175,
+                                                        columnNumber: 23
+                                                    }, undefined),
+                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                                        children: "\u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1"
+                                                    }, void 0, false, {
+                                                        fileName: "src/pages/Dashboard.jsx",
+                                                        lineNumber: 176,
+                                                        columnNumber: 23
+                                                    }, undefined),
+                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                                        children: "\u039A\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7"
+                                                    }, void 0, false, {
+                                                        fileName: "src/pages/Dashboard.jsx",
+                                                        lineNumber: 177,
+                                                        columnNumber: 23
+                                                    }, undefined)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "src/pages/Dashboard.jsx",
+                                                lineNumber: 173,
+                                                columnNumber: 21
+                                            }, undefined)
+                                        }, void 0, false, {
+                                            fileName: "src/pages/Dashboard.jsx",
+                                            lineNumber: 172,
+                                            columnNumber: 19
+                                        }, undefined),
+                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tbody", {
+                                            children: todayAppointments.map((appointment)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tr", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                                            children: new Date(appointment.date).toLocaleTimeString('el-GR', {
+                                                                hour: '2-digit',
+                                                                minute: '2-digit'
+                                                            })
+                                                        }, void 0, false, {
+                                                            fileName: "src/pages/Dashboard.jsx",
+                                                            lineNumber: 183,
+                                                            columnNumber: 25
+                                                        }, undefined),
+                                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                                            children: getCustomerName(appointment.customerId)
+                                                        }, void 0, false, {
+                                                            fileName: "src/pages/Dashboard.jsx",
+                                                            lineNumber: 184,
+                                                            columnNumber: 25
+                                                        }, undefined),
+                                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                                            children: getServiceName(appointment.serviceId)
+                                                        }, void 0, false, {
+                                                            fileName: "src/pages/Dashboard.jsx",
+                                                            lineNumber: 185,
+                                                            columnNumber: 25
+                                                        }, undefined),
+                                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                                                className: `badge ${appointment.status === 'confirmed' ? 'badge-success' : appointment.status === 'pending' ? 'badge-warning' : 'badge-danger'}`,
+                                                                children: appointment.status === 'confirmed' ? "\u0395\u03C0\u03B9\u03B2\u03B5\u03B2\u03B1\u03B9\u03C9\u03BC\u03AD\u03BD\u03BF" : appointment.status === 'pending' ? "\u03A3\u03B5 \u03B1\u03BD\u03B1\u03BC\u03BF\u03BD\u03AE" : "\u0391\u03BA\u03C5\u03C1\u03C9\u03BC\u03AD\u03BD\u03BF"
+                                                            }, void 0, false, {
+                                                                fileName: "src/pages/Dashboard.jsx",
+                                                                lineNumber: 187,
+                                                                columnNumber: 27
+                                                            }, undefined)
+                                                        }, void 0, false, {
+                                                            fileName: "src/pages/Dashboard.jsx",
+                                                            lineNumber: 186,
+                                                            columnNumber: 25
+                                                        }, undefined)
+                                                    ]
+                                                }, appointment.id, true, {
+                                                    fileName: "src/pages/Dashboard.jsx",
+                                                    lineNumber: 182,
+                                                    columnNumber: 23
+                                                }, undefined))
+                                        }, void 0, false, {
+                                            fileName: "src/pages/Dashboard.jsx",
+                                            lineNumber: 180,
+                                            columnNumber: 19
+                                        }, undefined)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "src/pages/Dashboard.jsx",
+                                    lineNumber: 171,
+                                    columnNumber: 17
+                                }, undefined)
+                            }, void 0, false, {
+                                fileName: "src/pages/Dashboard.jsx",
+                                lineNumber: 170,
+                                columnNumber: 15
+                            }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                className: "text-center py-4",
+                                children: "\u0394\u03B5\u03BD \u03C5\u03C0\u03AC\u03C1\u03C7\u03BF\u03C5\u03BD \u03C1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD \u03B3\u03B9\u03B1 \u03C3\u03AE\u03BC\u03B5\u03C1\u03B1"
+                            }, void 0, false, {
+                                fileName: "src/pages/Dashboard.jsx",
+                                lineNumber: 203,
+                                columnNumber: 15
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/pages/Dashboard.jsx",
+                        lineNumber: 167,
+                        columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                         className: "card p-4",
                         children: [
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
                                 className: "text-lg font-semibold mb-4",
-                                children: "\u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD \u03B1\u03BD\u03AC \u03B7\u03BC\u03AD\u03C1\u03B1"
+                                children: "\u0395\u03C0\u03B9\u03C3\u03BA\u03B5\u03C8\u03B9\u03BC\u03CC\u03C4\u03B7\u03C4\u03B1"
                             }, void 0, false, {
                                 fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 115,
-                                columnNumber: 11
+                                lineNumber: 209,
+                                columnNumber: 13
                             }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _appointmentsChartDefault.default), {
-                                data: appointmentsData
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 116,
-                                columnNumber: 11
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 114,
-                        columnNumber: 9
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/pages/Dashboard.jsx",
-                lineNumber: 108,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "card p-4 mb-6",
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                        className: "text-lg font-semibold mb-4",
-                        children: "\u03A3\u03B7\u03BC\u03B5\u03C1\u03B9\u03BD\u03AC \u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD"
-                    }, void 0, false, {
-                        fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 122,
-                        columnNumber: 9
-                    }, undefined),
-                    todayAppointments.length > 0 ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "table-container",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("table", {
-                            className: "w-full",
-                            children: [
-                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("thead", {
-                                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tr", {
-                                        children: [
-                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
-                                                children: "\u038F\u03C1\u03B1"
-                                            }, void 0, false, {
-                                                fileName: "src/pages/Dashboard.jsx",
-                                                lineNumber: 128,
-                                                columnNumber: 19
-                                            }, undefined),
-                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
-                                                children: "\u03A0\u03B5\u03BB\u03AC\u03C4\u03B7\u03C2"
-                                            }, void 0, false, {
-                                                fileName: "src/pages/Dashboard.jsx",
-                                                lineNumber: 129,
-                                                columnNumber: 19
-                                            }, undefined),
-                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
-                                                children: "\u03A5\u03C0\u03B7\u03C1\u03B5\u03C3\u03AF\u03B1"
-                                            }, void 0, false, {
-                                                fileName: "src/pages/Dashboard.jsx",
-                                                lineNumber: 130,
-                                                columnNumber: 19
-                                            }, undefined),
-                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
-                                                children: "\u039A\u03B1\u03C4\u03AC\u03C3\u03C4\u03B1\u03C3\u03B7"
-                                            }, void 0, false, {
-                                                fileName: "src/pages/Dashboard.jsx",
-                                                lineNumber: 131,
-                                                columnNumber: 19
-                                            }, undefined)
-                                        ]
-                                    }, void 0, true, {
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "bg-gray-100 p-4 rounded-lg text-center",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        children: "\u0397 \u03B5\u03BD\u03CC\u03C4\u03B7\u03C4\u03B1 \u03B1\u03C5\u03C4\u03AE \u03B8\u03B1 \u03C3\u03C5\u03BD\u03B4\u03B5\u03B8\u03B5\u03AF \u03BC\u03B5 \u03C4\u03BF Google Analytics API"
+                                    }, void 0, false, {
                                         fileName: "src/pages/Dashboard.jsx",
-                                        lineNumber: 127,
-                                        columnNumber: 17
+                                        lineNumber: 211,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                        className: "text-sm text-gray-500 mt-2",
+                                        children: "\u0393\u03B9\u03B1 \u03C4\u03B7\u03BD \u03C0\u03C1\u03BF\u03B2\u03BF\u03BB\u03AE \u03C3\u03C4\u03B1\u03C4\u03B9\u03C3\u03C4\u03B9\u03BA\u03CE\u03BD \u03B5\u03C0\u03B9\u03C3\u03BA\u03B5\u03C8\u03B9\u03BC\u03CC\u03C4\u03B7\u03C4\u03B1\u03C2 \u03C4\u03BF\u03C5 \u03B9\u03C3\u03C4\u03BF\u03C4\u03CC\u03C0\u03BF\u03C5 \u03C3\u03B1\u03C2"
+                                    }, void 0, false, {
+                                        fileName: "src/pages/Dashboard.jsx",
+                                        lineNumber: 212,
+                                        columnNumber: 15
                                     }, undefined)
-                                }, void 0, false, {
-                                    fileName: "src/pages/Dashboard.jsx",
-                                    lineNumber: 126,
-                                    columnNumber: 15
-                                }, undefined),
-                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tbody", {
-                                    children: todayAppointments.map((appointment)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tr", {
-                                            children: [
-                                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
-                                                    children: new Date(appointment.date).toLocaleTimeString('el-GR', {
-                                                        hour: '2-digit',
-                                                        minute: '2-digit'
-                                                    })
-                                                }, void 0, false, {
-                                                    fileName: "src/pages/Dashboard.jsx",
-                                                    lineNumber: 137,
-                                                    columnNumber: 21
-                                                }, undefined),
-                                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
-                                                    children: getCustomerName(appointment.customerId)
-                                                }, void 0, false, {
-                                                    fileName: "src/pages/Dashboard.jsx",
-                                                    lineNumber: 138,
-                                                    columnNumber: 21
-                                                }, undefined),
-                                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
-                                                    children: getServiceName(appointment.serviceId)
-                                                }, void 0, false, {
-                                                    fileName: "src/pages/Dashboard.jsx",
-                                                    lineNumber: 139,
-                                                    columnNumber: 21
-                                                }, undefined),
-                                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
-                                                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                                                        className: `badge ${appointment.status === 'confirmed' ? 'badge-success' : appointment.status === 'pending' ? 'badge-warning' : 'badge-danger'}`,
-                                                        children: appointment.status === 'confirmed' ? "\u0395\u03C0\u03B9\u03B2\u03B5\u03B2\u03B1\u03B9\u03C9\u03BC\u03AD\u03BD\u03BF" : appointment.status === 'pending' ? "\u03A3\u03B5 \u03B1\u03BD\u03B1\u03BC\u03BF\u03BD\u03AE" : "\u0391\u03BA\u03C5\u03C1\u03C9\u03BC\u03AD\u03BD\u03BF"
-                                                    }, void 0, false, {
-                                                        fileName: "src/pages/Dashboard.jsx",
-                                                        lineNumber: 141,
-                                                        columnNumber: 23
-                                                    }, undefined)
-                                                }, void 0, false, {
-                                                    fileName: "src/pages/Dashboard.jsx",
-                                                    lineNumber: 140,
-                                                    columnNumber: 21
-                                                }, undefined)
-                                            ]
-                                        }, appointment.id, true, {
-                                            fileName: "src/pages/Dashboard.jsx",
-                                            lineNumber: 136,
-                                            columnNumber: 19
-                                        }, undefined))
-                                }, void 0, false, {
-                                    fileName: "src/pages/Dashboard.jsx",
-                                    lineNumber: 134,
-                                    columnNumber: 15
-                                }, undefined)
-                            ]
-                        }, void 0, true, {
-                            fileName: "src/pages/Dashboard.jsx",
-                            lineNumber: 125,
-                            columnNumber: 13
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 124,
-                        columnNumber: 11
-                    }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                        className: "text-center py-4",
-                        children: "\u0394\u03B5\u03BD \u03C5\u03C0\u03AC\u03C1\u03C7\u03BF\u03C5\u03BD \u03C1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD \u03B3\u03B9\u03B1 \u03C3\u03AE\u03BC\u03B5\u03C1\u03B1"
-                    }, void 0, false, {
-                        fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 157,
-                        columnNumber: 11
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/pages/Dashboard.jsx",
-                lineNumber: 121,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "card p-4",
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                        className: "text-lg font-semibold mb-4",
-                        children: "\u0395\u03C0\u03B9\u03C3\u03BA\u03B5\u03C8\u03B9\u03BC\u03CC\u03C4\u03B7\u03C4\u03B1"
-                    }, void 0, false, {
-                        fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 163,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "bg-gray-100 p-4 rounded-lg text-center",
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                children: "\u0397 \u03B5\u03BD\u03CC\u03C4\u03B7\u03C4\u03B1 \u03B1\u03C5\u03C4\u03AE \u03B8\u03B1 \u03C3\u03C5\u03BD\u03B4\u03B5\u03B8\u03B5\u03AF \u03BC\u03B5 \u03C4\u03BF Google Analytics API"
-                            }, void 0, false, {
+                                ]
+                            }, void 0, true, {
                                 fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 165,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-sm text-gray-500 mt-2",
-                                children: "\u0393\u03B9\u03B1 \u03C4\u03B7\u03BD \u03C0\u03C1\u03BF\u03B2\u03BF\u03BB\u03AE \u03C3\u03C4\u03B1\u03C4\u03B9\u03C3\u03C4\u03B9\u03BA\u03CE\u03BD \u03B5\u03C0\u03B9\u03C3\u03BA\u03B5\u03C8\u03B9\u03BC\u03CC\u03C4\u03B7\u03C4\u03B1\u03C2 \u03C4\u03BF\u03C5 \u03B9\u03C3\u03C4\u03BF\u03C4\u03CC\u03C0\u03BF\u03C5 \u03C3\u03B1\u03C2"
-                            }, void 0, false, {
-                                fileName: "src/pages/Dashboard.jsx",
-                                lineNumber: 166,
-                                columnNumber: 11
+                                lineNumber: 210,
+                                columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/pages/Dashboard.jsx",
-                        lineNumber: 164,
-                        columnNumber: 9
+                        lineNumber: 208,
+                        columnNumber: 11
                     }, undefined)
                 ]
-            }, void 0, true, {
-                fileName: "src/pages/Dashboard.jsx",
-                lineNumber: 162,
-                columnNumber: 7
-            }, undefined)
+            }, void 0, true)
         ]
     }, void 0, true, {
         fileName: "src/pages/Dashboard.jsx",
-        lineNumber: 71,
+        lineNumber: 90,
         columnNumber: 5
     }, undefined);
 };
-_s(Dashboard, "mkdGYCGh4fCfAOKzX6coTPHVdD0=", false, function() {
+_s(Dashboard, "C2DDeNBi+Vply5Ib2pRM2WswXwQ=", false, function() {
     return [
         (0, _dataContext.useData)
     ];
@@ -29646,63 +29738,81 @@ const SalesChart = ({ data })=>{
     _s();
     const chartRef = (0, _react.useRef)(null);
     const chartInstance = (0, _react.useRef)(null);
+    const [error, setError] = (0, _react.useState)(null);
     (0, _react.useEffect)(()=>{
-        if (chartRef.current) {
-            // Destroy previous chart if it exists
-            if (chartInstance.current) chartInstance.current.destroy();
-            // Create new chart
-            const ctx = chartRef.current.getContext('2d');
-            chartInstance.current = new (0, _autoDefault.default)(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.map((item)=>item.month),
-                    datasets: [
-                        {
-                            label: "\u03A0\u03C9\u03BB\u03AE\u03C3\u03B5\u03B9\u03C2 (\u20AC)",
-                            data: data.map((item)=>item.sales),
-                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: "\u03A0\u03BF\u03C3\u03CC (\u20AC)"
+        try {
+            if (chartRef.current) {
+                // Destroy previous chart if it exists
+                if (chartInstance.current) chartInstance.current.destroy();
+                // Check if data is valid
+                if (!data || !Array.isArray(data) || data.length === 0) {
+                    console.warn('Invalid or empty data provided to SalesChart');
+                    setError("\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B1 \u03B4\u03B5\u03B4\u03BF\u03BC\u03AD\u03BD\u03B1 \u03B3\u03C1\u03B1\u03C6\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2");
+                    return;
+                }
+                // Create new chart
+                const ctx = chartRef.current.getContext('2d');
+                chartInstance.current = new (0, _autoDefault.default)(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.map((item)=>item.month),
+                        datasets: [
+                            {
+                                label: "\u03A0\u03C9\u03BB\u03AE\u03C3\u03B5\u03B9\u03C2 (\u20AC)",
+                                data: data.map((item)=>item.sales),
+                                backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                                borderColor: 'rgba(59, 130, 246, 1)',
+                                borderWidth: 1
                             }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: "\u039C\u03AE\u03BD\u03B1\u03C2"
-                            }
-                        }
+                        ]
                     },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: "\u03A0\u03BF\u03C3\u03CC (\u20AC)"
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: "\u039C\u03AE\u03BD\u03B1\u03C2"
+                                }
+                            }
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.dataset.label}: ${context.raw.toFixed(2)}\u{20AC}`;
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw.toFixed(2)}\u{20AC}`;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+                // Reset error state if all is well
+                setError(null);
+            }
+        } catch (err) {
+            console.error('Error creating sales chart:', err);
+            setError("\u03A3\u03C6\u03AC\u03BB\u03BC\u03B1 \u03B4\u03B7\u03BC\u03B9\u03BF\u03C5\u03C1\u03B3\u03AF\u03B1\u03C2 \u03B3\u03C1\u03B1\u03C6\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2");
         }
         // Cleanup function
         return ()=>{
-            if (chartInstance.current) chartInstance.current.destroy();
+            try {
+                if (chartInstance.current) chartInstance.current.destroy();
+            } catch (err) {
+                console.error('Error destroying chart:', err);
+            }
         };
     }, [
         data
@@ -29711,20 +29821,34 @@ const SalesChart = ({ data })=>{
         style: {
             height: '300px'
         },
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("canvas", {
+        children: error ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: "flex items-center justify-center h-full bg-gray-100 rounded-lg p-4",
+            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                className: "text-red-500",
+                children: error
+            }, void 0, false, {
+                fileName: "src/components/charts/SalesChart.jsx",
+                lineNumber: 97,
+                columnNumber: 11
+            }, undefined)
+        }, void 0, false, {
+            fileName: "src/components/charts/SalesChart.jsx",
+            lineNumber: 96,
+            columnNumber: 9
+        }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("canvas", {
             ref: chartRef
         }, void 0, false, {
             fileName: "src/components/charts/SalesChart.jsx",
-            lineNumber: 75,
-            columnNumber: 7
+            lineNumber: 100,
+            columnNumber: 9
         }, undefined)
     }, void 0, false, {
         fileName: "src/components/charts/SalesChart.jsx",
-        lineNumber: 74,
+        lineNumber: 94,
         columnNumber: 5
     }, undefined);
 };
-_s(SalesChart, "u5+iHnwD4hjVcMuzTE/TbI78erc=");
+_s(SalesChart, "GDPmpCkeSW8AUkBQy7KM22kGeGA=");
 _c = SalesChart;
 exports.default = SalesChart;
 var _c;
@@ -43215,66 +43339,84 @@ const AppointmentsChart = ({ data })=>{
     _s();
     const chartRef = (0, _react.useRef)(null);
     const chartInstance = (0, _react.useRef)(null);
+    const [error, setError] = (0, _react.useState)(null);
     (0, _react.useEffect)(()=>{
-        if (chartRef.current) {
-            // Destroy previous chart if it exists
-            if (chartInstance.current) chartInstance.current.destroy();
-            // Create new chart
-            const ctx = chartRef.current.getContext('2d');
-            chartInstance.current = new (0, _autoDefault.default)(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map((item)=>item.day),
-                    datasets: [
-                        {
-                            label: "\u0391\u03C1\u03B9\u03B8\u03BC\u03CC\u03C2 \u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD",
-                            data: data.map((item)=>item.appointments),
-                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                            borderColor: 'rgba(16, 185, 129, 1)',
-                            borderWidth: 2,
-                            tension: 0.3,
-                            fill: true,
-                            pointBackgroundColor: 'rgba(16, 185, 129, 1)',
-                            pointBorderColor: '#fff',
-                            pointBorderWidth: 2,
-                            pointRadius: 4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: "\u0391\u03C1\u03B9\u03B8\u03BC\u03CC\u03C2 \u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD"
+        try {
+            if (chartRef.current) {
+                // Destroy previous chart if it exists
+                if (chartInstance.current) chartInstance.current.destroy();
+                // Check if data is valid
+                if (!data || !Array.isArray(data) || data.length === 0) {
+                    console.warn('Invalid or empty data provided to AppointmentsChart');
+                    setError("\u039C\u03B7 \u03AD\u03B3\u03BA\u03C5\u03C1\u03B1 \u03B4\u03B5\u03B4\u03BF\u03BC\u03AD\u03BD\u03B1 \u03B3\u03C1\u03B1\u03C6\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2");
+                    return;
+                }
+                // Create new chart
+                const ctx = chartRef.current.getContext('2d');
+                chartInstance.current = new (0, _autoDefault.default)(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.map((item)=>item.day),
+                        datasets: [
+                            {
+                                label: "\u0391\u03C1\u03B9\u03B8\u03BC\u03CC\u03C2 \u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD",
+                                data: data.map((item)=>item.appointments),
+                                backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                                borderColor: 'rgba(16, 185, 129, 1)',
+                                borderWidth: 2,
+                                tension: 0.3,
+                                fill: true,
+                                pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                pointRadius: 4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: "\u0391\u03C1\u03B9\u03B8\u03BC\u03CC\u03C2 \u03A1\u03B1\u03BD\u03C4\u03B5\u03B2\u03BF\u03CD"
+                                },
+                                ticks: {
+                                    stepSize: 1,
+                                    precision: 0
+                                }
                             },
-                            ticks: {
-                                stepSize: 1,
-                                precision: 0
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: "\u0397\u03BC\u03AD\u03C1\u03B1"
+                                }
                             }
                         },
-                        x: {
-                            title: {
+                        plugins: {
+                            legend: {
                                 display: true,
-                                text: "\u0397\u03BC\u03AD\u03C1\u03B1"
+                                position: 'top'
                             }
                         }
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        }
                     }
-                }
-            });
+                });
+                // Reset error state if all is well
+                setError(null);
+            }
+        } catch (err) {
+            console.error('Error creating appointments chart:', err);
+            setError("\u03A3\u03C6\u03AC\u03BB\u03BC\u03B1 \u03B4\u03B7\u03BC\u03B9\u03BF\u03C5\u03C1\u03B3\u03AF\u03B1\u03C2 \u03B3\u03C1\u03B1\u03C6\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2");
         }
         // Cleanup function
         return ()=>{
-            if (chartInstance.current) chartInstance.current.destroy();
+            try {
+                if (chartInstance.current) chartInstance.current.destroy();
+            } catch (err) {
+                console.error('Error destroying chart:', err);
+            }
         };
     }, [
         data
@@ -43283,20 +43425,34 @@ const AppointmentsChart = ({ data })=>{
         style: {
             height: '300px'
         },
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("canvas", {
+        children: error ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: "flex items-center justify-center h-full bg-gray-100 rounded-lg p-4",
+            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                className: "text-red-500",
+                children: error
+            }, void 0, false, {
+                fileName: "src/components/charts/AppointmentsChart.jsx",
+                lineNumber: 100,
+                columnNumber: 11
+            }, undefined)
+        }, void 0, false, {
+            fileName: "src/components/charts/AppointmentsChart.jsx",
+            lineNumber: 99,
+            columnNumber: 9
+        }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("canvas", {
             ref: chartRef
         }, void 0, false, {
             fileName: "src/components/charts/AppointmentsChart.jsx",
-            lineNumber: 78,
-            columnNumber: 7
+            lineNumber: 103,
+            columnNumber: 9
         }, undefined)
     }, void 0, false, {
         fileName: "src/components/charts/AppointmentsChart.jsx",
-        lineNumber: 77,
+        lineNumber: 97,
         columnNumber: 5
     }, undefined);
 };
-_s(AppointmentsChart, "u5+iHnwD4hjVcMuzTE/TbI78erc=");
+_s(AppointmentsChart, "GDPmpCkeSW8AUkBQy7KM22kGeGA=");
 _c = AppointmentsChart;
 exports.default = AppointmentsChart;
 var _c;
