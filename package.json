@@ -1,28 +1,31 @@
 {
-  "name": "business-dashboard",
+  "name": "workspace",
   "version": "1.0.0",
-  "description": "A comprehensive admin dashboard for business management",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/postcss": "^4.0.17",
     "@types/node": "^22.13.14",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
-    "autoprefixer": "^10.4.21",
+    "autoprefixer": "^10.4.14",
     "chart.js": "^4.4.8",
     "eslint": "^9.23.0",
     "eslint-config-next": "^15.2.4",
+    "framer-motion": "^12.6.2",
     "next": "^15.2.4",
-    "parcel": "^2.10.3",
     "postcss": "^8.5.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "tailwindcss": "^4.0.17",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.8.2"
   }
 }

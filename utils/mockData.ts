@@ -1,484 +1,369 @@
-// Types
-export type Customer = {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  type: 'AUTO' | 'MOTO' | 'YACHT' | 'AVIATION';
-  vehicle?: string;
-  dateAdded: string;
-};
+import { 
+  Customer, 
+  Staff, 
+  Service, 
+  Product, 
+  Appointment, 
+  Sale,
+  SalesData,
+  AppointmentsData
+} from '@/lib/types';
 
-export type Staff = {
-  id: number;
-  name: string;
-  position: string;
-  email: string;
-  phone: string;
-  startDate: string;
-  stats: {
-    appointments: number;
-    completed: number;
-    sales: number;
-  };
-};
+// Chart data
+const MONTHLY_SALES_DATA: SalesData[] = [
+  { month: 'Ιαν', sales: 4800 },
+  { month: 'Φεβ', sales: 5400 },
+  { month: 'Μαρ', sales: 6200 },
+  { month: 'Απρ', sales: 5800 },
+  { month: 'Μάι', sales: 6800 },
+  { month: 'Ιουν', sales: 7600 },
+  { month: 'Ιουλ', sales: 8200 },
+  { month: 'Αυγ', sales: 8800 },
+  { month: 'Σεπ', sales: 7400 },
+  { month: 'Οκτ', sales: 6900 },
+  { month: 'Νοε', sales: 6300 },
+  { month: 'Δεκ', sales: 7500 },
+];
 
-export type Service = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  duration: number; // in minutes
-  category: 'AUTO' | 'MOTO' | 'YACHT' | 'AVIATION';
-};
+const WEEKLY_APPOINTMENTS_DATA: AppointmentsData[] = [
+  { day: 'Δευ', appointments: 3 },
+  { day: 'Τρι', appointments: 5 },
+  { day: 'Τετ', appointments: 4 },
+  { day: 'Πεμ', appointments: 6 },
+  { day: 'Παρ', appointments: 5 },
+  { day: 'Σαβ', appointments: 4 },
+  { day: 'Κυρ', appointments: 2 },
+];
 
-export type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  category: string;
-};
+// Customer data
+const CUSTOMERS: Customer[] = [
+  {
+    id: 1,
+    name: 'Γιάννης Παπαδόπουλος',
+    email: 'giannis@example.com',
+    phone: '6912345678',
+    type: 'AUTO',
+    vehicle: 'BMW X5 2019',
+    dateAdded: '2023-10-15',
+  },
+  {
+    id: 2,
+    name: 'Μαρία Κωνσταντίνου',
+    email: 'maria@example.com',
+    phone: '6987654321',
+    type: 'MOTO',
+    vehicle: 'Ducati Panigale V4',
+    dateAdded: '2023-11-05',
+  },
+  {
+    id: 3,
+    name: 'Δημήτρης Αναγνώστου',
+    email: 'dimitris@example.com',
+    phone: '6955552222',
+    type: 'YACHT',
+    vehicle: 'Princess F55',
+    dateAdded: '2023-09-20',
+  },
+  {
+    id: 4,
+    name: 'Ελένη Παπαδάκη',
+    email: 'eleni@example.com',
+    phone: '6944443333',
+    type: 'AUTO',
+    vehicle: 'Audi A6 2022',
+    dateAdded: '2023-12-10',
+  },
+  {
+    id: 5,
+    name: 'Κώστας Μακρίδης',
+    email: 'kostas@example.com',
+    phone: '6933334444',
+    type: 'AVIATION',
+    vehicle: 'Cessna Citation',
+    dateAdded: '2024-01-05',
+  },
+];
 
-export type Appointment = {
-  id: number;
-  customerId: number;
-  customerName: string;
-  staffId: number;
-  staffName: string;
-  service: string;
-  date: string;
-  time: string;
-  status: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
-  type: 'AUTO' | 'MOTO' | 'YACHT' | 'AVIATION';
-  notes?: string;
-};
+// Staff data
+const STAFF: Staff[] = [
+  {
+    id: 1,
+    name: 'Αλέξανδρος Ιωάννου',
+    position: 'Τεχνικός',
+    email: 'alexandros@example.com',
+    phone: '6921212121',
+    startDate: '2022-05-10',
+    stats: {
+      appointments: 120,
+      completed: 115,
+      sales: 20,
+    },
+  },
+  {
+    id: 2,
+    name: 'Χριστίνα Αλεξίου',
+    position: 'Τεχνικός',
+    email: 'christina@example.com',
+    phone: '6932323232',
+    startDate: '2022-08-15',
+    stats: {
+      appointments: 95,
+      completed: 90,
+      sales: 15,
+    },
+  },
+  {
+    id: 3,
+    name: 'Γεώργιος Παπαγεωργίου',
+    position: 'Υπεύθυνος Πωλήσεων',
+    email: 'georgios@example.com',
+    phone: '6945454545',
+    startDate: '2021-11-05',
+    stats: {
+      appointments: 50,
+      completed: 45,
+      sales: 120,
+    },
+  },
+];
 
-export type Sale = {
-  id: number;
-  customerId: number;
-  customerName: string;
-  items: {
-    type: 'SERVICE' | 'PRODUCT';
-    name: string;
-    price: number;
-    quantity: number;
-  }[];
-  total: number;
-  date: string;
-  paymentMethod: 'CASH' | 'CARD' | 'TRANSFER';
-};
+// Services data
+const SERVICES: Service[] = [
+  {
+    id: 1,
+    name: 'Ceramic Pro 9H',
+    description: 'Προστατευτική επίστρωση 9H για αυτοκίνητα',
+    price: 350,
+    duration: 180,
+    category: 'AUTO',
+  },
+  {
+    id: 2,
+    name: 'Ceramic Pro Light',
+    description: 'Ελαφριά προστατευτική επίστρωση για αυτοκίνητα',
+    price: 250,
+    duration: 120,
+    category: 'AUTO',
+  },
+  {
+    id: 3,
+    name: 'Ceramic Pro Top Coat',
+    description: 'Τελική επίστρωση για επιπλέον προστασία και λάμψη',
+    price: 150,
+    duration: 60,
+    category: 'AUTO',
+  },
+  {
+    id: 4,
+    name: 'Ceramic Pro Wheel & Caliper',
+    description: 'Προστασία για ζάντες και δαγκάνες φρένων',
+    price: 200,
+    duration: 90,
+    category: 'AUTO',
+  },
+  {
+    id: 5,
+    name: 'Moto Protection',
+    description: 'Πλήρης προστασία για μοτοσυκλέτες',
+    price: 280,
+    duration: 150,
+    category: 'MOTO',
+  },
+  {
+    id: 6,
+    name: 'Yacht Ceramic Coating',
+    description: 'Προστατευτική επίστρωση για σκάφη',
+    price: 1200,
+    duration: 480,
+    category: 'YACHT',
+  },
+  {
+    id: 7,
+    name: 'Aviation Ceramic Shield',
+    description: 'Ειδική επίστρωση για αεροσκάφη',
+    price: 2500,
+    duration: 720,
+    category: 'AVIATION',
+  },
+];
 
-export type SalesData = {
-  month: string;
-  sales: number;
-};
+// Products data
+const PRODUCTS: Product[] = [
+  {
+    id: 1,
+    name: 'Ceramic Pro Maintenance Shampoo',
+    description: 'Ειδικό σαμπουάν για συντήρηση της επίστρωσης',
+    price: 25,
+    stock: 45,
+    category: 'Περιποίηση',
+  },
+  {
+    id: 2,
+    name: 'Ceramic Pro Rain',
+    description: 'Αδιαβροχοποιητικό για τζάμια',
+    price: 40,
+    stock: 30,
+    category: 'Προστασία',
+  },
+  {
+    id: 3,
+    name: 'Ceramic Pro Strong',
+    description: 'Καθαριστικό για επίμονους λεκέδες',
+    price: 35,
+    stock: 25,
+    category: 'Καθαριστικά',
+  },
+];
 
-export type AppointmentsData = {
-  day: string;
-  appointments: number;
-};
+// Appointments data
+const APPOINTMENTS: Appointment[] = [
+  {
+    id: 1,
+    customerId: 1,
+    customerName: 'Γιάννης Παπαδόπουλος',
+    staffId: 1,
+    staffName: 'Αλέξανδρος Ιωάννου',
+    service: 'Ceramic Pro 9H',
+    date: '2024-03-30',
+    time: '10:00',
+    status: 'SCHEDULED',
+    type: 'AUTO',
+    notes: 'Πρώτη επίσκεψη',
+  },
+  {
+    id: 2,
+    customerId: 2,
+    customerName: 'Μαρία Κωνσταντίνου',
+    staffId: 2,
+    staffName: 'Χριστίνα Αλεξίου',
+    service: 'Moto Protection',
+    date: '2024-03-29',
+    time: '14:00',
+    status: 'SCHEDULED',
+    type: 'MOTO',
+  },
+  {
+    id: 3,
+    customerId: 3,
+    customerName: 'Δημήτρης Αναγνώστου',
+    staffId: 1,
+    staffName: 'Αλέξανδρος Ιωάννου',
+    service: 'Yacht Ceramic Coating',
+    date: '2024-04-05',
+    time: '09:00',
+    status: 'SCHEDULED',
+    type: 'YACHT',
+    notes: 'Να γίνει επιθεώρηση πριν την εφαρμογή',
+  },
+  {
+    id: 4,
+    customerId: 4,
+    customerName: 'Ελένη Παπαδάκη',
+    staffId: 2,
+    staffName: 'Χριστίνα Αλεξίου',
+    service: 'Ceramic Pro Light',
+    date: '2024-03-28',
+    time: '11:00',
+    status: 'COMPLETED',
+    type: 'AUTO',
+  },
+  {
+    id: 5,
+    customerId: 5,
+    customerName: 'Κώστας Μακρίδης',
+    staffId: 1,
+    staffName: 'Αλέξανδρος Ιωάννου',
+    service: 'Aviation Ceramic Shield',
+    date: '2024-04-10',
+    time: '08:00',
+    status: 'SCHEDULED',
+    type: 'AVIATION',
+    notes: 'Θα χρειαστούν δύο ημέρες για την ολοκλήρωση',
+  },
+];
 
-// Mock data
+// Sales data
+const SALES: Sale[] = [
+  {
+    id: 1,
+    customerId: 1,
+    customerName: 'Γιάννης Παπαδόπουλος',
+    items: [
+      {
+        type: 'SERVICE',
+        name: 'Ceramic Pro 9H',
+        price: 350,
+        quantity: 1,
+      },
+      {
+        type: 'PRODUCT',
+        name: 'Ceramic Pro Maintenance Shampoo',
+        price: 25,
+        quantity: 1,
+      },
+    ],
+    total: 375,
+    date: '2024-02-15',
+    paymentMethod: 'CARD',
+  },
+  {
+    id: 2,
+    customerId: 2,
+    customerName: 'Μαρία Κωνσταντίνου',
+    items: [
+      {
+        type: 'SERVICE',
+        name: 'Moto Protection',
+        price: 280,
+        quantity: 1,
+      },
+    ],
+    total: 280,
+    date: '2024-02-20',
+    paymentMethod: 'CASH',
+  },
+  {
+    id: 3,
+    customerId: 4,
+    customerName: 'Ελένη Παπαδάκη',
+    items: [
+      {
+        type: 'SERVICE',
+        name: 'Ceramic Pro Light',
+        price: 250,
+        quantity: 1,
+      },
+      {
+        type: 'PRODUCT',
+        name: 'Ceramic Pro Rain',
+        price: 40,
+        quantity: 1,
+      },
+      {
+        type: 'PRODUCT',
+        name: 'Ceramic Pro Maintenance Shampoo',
+        price: 25,
+        quantity: 1,
+      },
+    ],
+    total: 315,
+    date: '2024-03-28',
+    paymentMethod: 'CARD',
+  },
+];
+
+// Initial data object
 export const initialData = {
-  customers: [
-    {
-      id: 1,
-      name: 'Γιώργος Παπαδόπουλος',
-      email: 'gpapad@example.com',
-      phone: '6944123456',
-      type: 'AUTO',
-      vehicle: 'BMW X5 2020',
-      dateAdded: '2023-01-15'
-    },
-    {
-      id: 2,
-      name: 'Μαρία Κωνσταντίνου',
-      email: 'mariakonst@example.com',
-      phone: '6977654321',
-      type: 'MOTO',
-      vehicle: 'Honda CBR 650R',
-      dateAdded: '2023-02-20'
-    },
-    {
-      id: 3,
-      name: 'Δημήτρης Αντωνίου',
-      email: 'dimant@example.com',
-      phone: '6933222111',
-      type: 'YACHT',
-      vehicle: 'Oceanic 45ft',
-      dateAdded: '2023-03-10'
-    },
-    {
-      id: 4,
-      name: 'Ελένη Γεωργίου',
-      email: 'elenigeo@example.com',
-      phone: '6955443322',
-      type: 'AUTO',
-      vehicle: 'Mercedes C200 2022',
-      dateAdded: '2023-04-05'
-    },
-    {
-      id: 5,
-      name: 'Νίκος Καραμανλής',
-      email: 'nikoskar@example.com',
-      phone: '6988776655',
-      type: 'AVIATION',
-      vehicle: 'Cessna 172',
-      dateAdded: '2023-05-18'
-    }
-  ] as Customer[],
-  
-  staff: [
-    {
-      id: 1,
-      name: 'Αλέξανδρος Νικολάου',
-      position: 'Επικεφαλής Τεχνικός',
-      email: 'alexnik@example.com',
-      phone: '6944567890',
-      startDate: '2022-05-10',
-      stats: {
-        appointments: 145,
-        completed: 138,
-        sales: 162000
-      }
-    },
-    {
-      id: 2,
-      name: 'Χριστίνα Δημητρίου',
-      position: 'Τεχνικός AUTO',
-      email: 'christinad@example.com',
-      phone: '6977123456',
-      startDate: '2022-08-15',
-      stats: {
-        appointments: 120,
-        completed: 115,
-        sales: 128000
-      }
-    },
-    {
-      id: 3,
-      name: 'Κώστας Αναγνώστου',
-      position: 'Τεχνικός YACHT',
-      email: 'kostasan@example.com',
-      phone: '6933987654',
-      startDate: '2023-01-20',
-      stats: {
-        appointments: 75,
-        completed: 70,
-        sales: 230000
-      }
-    },
-    {
-      id: 4,
-      name: 'Σοφία Παππά',
-      position: 'Υπεύθυνη Πωλήσεων',
-      email: 'sofiap@example.com',
-      phone: '6955111222',
-      startDate: '2022-06-01',
-      stats: {
-        appointments: 0,
-        completed: 0,
-        sales: 350000
-      }
-    }
-  ] as Staff[],
-  
-  services: [
-    {
-      id: 1,
-      name: 'Ceramic Coating AUTO Standard',
-      description: 'Βασική επίστρωση κεραμικού για αυτοκίνητα',
-      price: 350,
-      duration: 240,
-      category: 'AUTO'
-    },
-    {
-      id: 2,
-      name: 'Ceramic Coating AUTO Premium',
-      description: 'Premium επίστρωση κεραμικού για αυτοκίνητα με εγγύηση 5 ετών',
-      price: 650,
-      duration: 480,
-      category: 'AUTO'
-    },
-    {
-      id: 3,
-      name: 'Ceramic Coating MOTO',
-      description: 'Επίστρωση κεραμικού για μοτοσυκλέτες',
-      price: 250,
-      duration: 180,
-      category: 'MOTO'
-    },
-    {
-      id: 4,
-      name: 'Ceramic Coating YACHT Basic',
-      description: 'Βασική επίστρωση κεραμικού για σκάφη έως 25ft',
-      price: 1500,
-      duration: 720,
-      category: 'YACHT'
-    },
-    {
-      id: 5,
-      name: 'Ceramic Coating YACHT Premium',
-      description: 'Premium επίστρωση κεραμικού για σκάφη με εγγύηση 3 ετών',
-      price: 4500,
-      duration: 1440,
-      category: 'YACHT'
-    },
-    {
-      id: 6,
-      name: 'Ceramic Coating AVIATION',
-      description: 'Επίστρωση κεραμικού για αεροσκάφη γενικής αεροπορίας',
-      price: 5000,
-      duration: 1200,
-      category: 'AVIATION'
-    }
-  ] as Service[],
-  
-  products: [
-    {
-      id: 1,
-      name: 'Ceramic Spray Maintenance',
-      description: 'Σπρέι συντήρησης κεραμικής επίστρωσης',
-      price: 25,
-      stock: 45,
-      category: 'MAINTENANCE'
-    },
-    {
-      id: 2,
-      name: 'Premium Microfiber Towel',
-      description: 'Πανί μικροϊνών υψηλής ποιότητας',
-      price: 12,
-      stock: 120,
-      category: 'ACCESSORIES'
-    },
-    {
-      id: 3,
-      name: 'Ceramic Wax',
-      description: 'Κερί με κεραμικά συστατικά',
-      price: 35,
-      stock: 30,
-      category: 'MAINTENANCE'
-    },
-    {
-      id: 4,
-      name: 'Paint Correction Kit',
-      description: 'Κιτ διόρθωσης χρώματος για ερασιτέχνες',
-      price: 120,
-      stock: 15,
-      category: 'DIY'
-    },
-    {
-      id: 5,
-      name: 'Wheel Ceramic Coating',
-      description: 'Κεραμική επίστρωση για ζάντες',
-      price: 40,
-      stock: 25,
-      category: 'SPECIALTY'
-    }
-  ] as Product[],
-  
-  appointments: [
-    {
-      id: 1,
-      customerId: 1,
-      customerName: 'Γιώργος Παπαδόπουλος',
-      staffId: 1,
-      staffName: 'Αλέξανδρος Νικολάου',
-      service: 'Ceramic Coating AUTO Premium',
-      date: '2023-06-15',
-      time: '10:00',
-      status: 'COMPLETED',
-      type: 'AUTO',
-      notes: 'Πελάτης ζήτησε επιπλέον προστασία για τη μάσκα'
-    },
-    {
-      id: 2,
-      customerId: 2,
-      customerName: 'Μαρία Κωνσταντίνου',
-      staffId: 2,
-      staffName: 'Χριστίνα Δημητρίου',
-      service: 'Ceramic Coating MOTO',
-      date: '2023-06-18',
-      time: '14:00',
-      status: 'COMPLETED',
-      type: 'MOTO'
-    },
-    {
-      id: 3,
-      customerId: 3,
-      customerName: 'Δημήτρης Αντωνίου',
-      staffId: 3,
-      staffName: 'Κώστας Αναγνώστου',
-      service: 'Ceramic Coating YACHT Premium',
-      date: '2023-06-25',
-      time: '09:00',
-      status: 'SCHEDULED',
-      type: 'YACHT',
-      notes: 'Θα χρειαστεί μεταφορά στο σκάφος'
-    },
-    {
-      id: 4,
-      customerId: 4,
-      customerName: 'Ελένη Γεωργίου',
-      staffId: 2,
-      staffName: 'Χριστίνα Δημητρίου',
-      service: 'Ceramic Coating AUTO Standard',
-      date: '2023-06-20',
-      time: '11:30',
-      status: 'COMPLETED',
-      type: 'AUTO'
-    },
-    {
-      id: 5,
-      customerId: 5,
-      customerName: 'Νίκος Καραμανλής',
-      staffId: 1,
-      staffName: 'Αλέξανδρος Νικολάου',
-      service: 'Ceramic Coating AVIATION',
-      date: '2023-07-05',
-      time: '08:00',
-      status: 'SCHEDULED',
-      type: 'AVIATION',
-      notes: 'Θα γίνει στο υπόστεγο του πελάτη'
-    },
-    {
-      id: 6,
-      customerId: 1,
-      customerName: 'Γιώργος Παπαδόπουλος',
-      staffId: 1,
-      staffName: 'Αλέξανδρος Νικολάου',
-      service: 'Ceramic Coating AUTO Standard',
-      date: '2023-07-12',
-      time: '13:00',
-      status: 'SCHEDULED',
-      type: 'AUTO'
-    }
-  ] as Appointment[],
-  
-  sales: [
-    {
-      id: 1,
-      customerId: 1,
-      customerName: 'Γιώργος Παπαδόπουλος',
-      items: [
-        {
-          type: 'SERVICE',
-          name: 'Ceramic Coating AUTO Premium',
-          price: 650,
-          quantity: 1
-        },
-        {
-          type: 'PRODUCT',
-          name: 'Ceramic Spray Maintenance',
-          price: 25,
-          quantity: 1
-        }
-      ],
-      total: 675,
-      date: '2023-06-15',
-      paymentMethod: 'CARD'
-    },
-    {
-      id: 2,
-      customerId: 2,
-      customerName: 'Μαρία Κωνσταντίνου',
-      items: [
-        {
-          type: 'SERVICE',
-          name: 'Ceramic Coating MOTO',
-          price: 250,
-          quantity: 1
-        }
-      ],
-      total: 250,
-      date: '2023-06-18',
-      paymentMethod: 'CASH'
-    },
-    {
-      id: 3,
-      customerId: 4,
-      customerName: 'Ελένη Γεωργίου',
-      items: [
-        {
-          type: 'SERVICE',
-          name: 'Ceramic Coating AUTO Standard',
-          price: 350,
-          quantity: 1
-        },
-        {
-          type: 'PRODUCT',
-          name: 'Premium Microfiber Towel',
-          price: 12,
-          quantity: 2
-        },
-        {
-          type: 'PRODUCT',
-          name: 'Ceramic Spray Maintenance',
-          price: 25,
-          quantity: 1
-        }
-      ],
-      total: 399,
-      date: '2023-06-20',
-      paymentMethod: 'CARD'
-    },
-    {
-      id: 4,
-      customerId: 0,
-      customerName: 'Πελάτης Λιανικής',
-      items: [
-        {
-          type: 'PRODUCT',
-          name: 'Paint Correction Kit',
-          price: 120,
-          quantity: 1
-        },
-        {
-          type: 'PRODUCT',
-          name: 'Ceramic Wax',
-          price: 35,
-          quantity: 1
-        }
-      ],
-      total: 155,
-      date: '2023-06-22',
-      paymentMethod: 'CASH'
-    }
-  ] as Sale[]
+  customers: CUSTOMERS,
+  staff: STAFF,
+  services: SERVICES,
+  products: PRODUCTS,
+  appointments: APPOINTMENTS,
+  sales: SALES,
+  salesData: MONTHLY_SALES_DATA,
+  appointmentsData: WEEKLY_APPOINTMENTS_DATA,
 };
 
-// Generate monthly sales data for chart
-export const getMonthlySalesData = (): SalesData[] => {
-  const months = ['Ιανουάριος', 'Φεβρουάριος', 'Μάρτιος', 'Απρίλιος', 'Μάιος', 'Ιούνιος', 
-                 'Ιούλιος', 'Αύγουστος', 'Σεπτέμβριος', 'Οκτώβριος', 'Νοέμβριος', 'Δεκέμβριος'];
-  
-  return months.map((month, index) => {
-    // Simulate increasing trend with some randomness
-    const base = 15000 + (index * 2000);
-    const randomFactor = Math.random() * 5000 - 2500;
-    return {
-      month: month,
-      sales: Math.round(base + randomFactor)
-    };
-  });
-};
-
-// Generate weekly appointments data for chart
-export const getWeeklyAppointmentsData = (): AppointmentsData[] => {
-  const days = ['Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο', 'Κυριακή'];
-  
-  return days.map(day => {
-    // Most appointments on weekdays, fewer on weekends
-    let base = 5;
-    if (day === 'Σάββατο') base = 3;
-    if (day === 'Κυριακή') base = 0;
-    
-    const randomFactor = Math.floor(Math.random() * 3);
-    return {
-      day: day,
-      appointments: base + randomFactor
-    };
-  });
-};
+// Helper functions for accessing the data
+export const getMonthlySalesData = () => MONTHLY_SALES_DATA;
+export const getWeeklyAppointmentsData = () => WEEKLY_APPOINTMENTS_DATA;
