@@ -173,19 +173,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, setMobileMenuOpen }) => {
   // Desktop persistent sidebar
   return (
     <div className="hidden md:flex md:flex-col md:fixed md:inset-y-0 md:w-64 md:z-10">
-      <div className="flex min-h-0 flex-1 flex-col border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-        <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-          <div className="flex items-center flex-shrink-0 px-4 mb-5">
-            <img
-              className="h-8 w-auto"
-              src="/logo.svg"
-              alt="Ceramic Pro"
-            />
-            <h1 className="ml-2 text-xl font-semibold text-gray-900 dark:text-white">
-              Ceramic Pro
-            </h1>
-          </div>
-          <nav className="mt-5 flex-1 space-y-1 px-2">
+      <div className="flex flex-col h-full border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <div className="flex items-center flex-shrink-0 px-4 py-5">
+          <img
+            className="h-8 w-auto"
+            src="/logo.svg"
+            alt="Ceramic Pro"
+          />
+          <h1 className="ml-2 text-xl font-semibold text-gray-900 dark:text-white">
+            Ceramic Pro
+          </h1>
+        </div>
+        
+        {/* Make this div scrollable with flex-grow */}
+        <div className="flex-grow overflow-y-auto">
+          <nav className="flex-1 space-y-1 px-2 pb-4">
             {navItems.map((item) => (
               <Link
                 key={item.name}
@@ -210,7 +212,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, setMobileMenuOpen }) => {
             ))}
           </nav>
         </div>
-        <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 p-4">
+        
+        {/* Footer stays at the bottom */}
+        <div className="flex-shrink-0 flex items-center justify-between border-t border-gray-200 dark:border-gray-700 p-4">
           <div className="text-xs text-gray-500 dark:text-gray-400">
             © 2024 Ceramic Pro
           </div>
