@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { TwilioConfig } from '@/utils/notification';
-import twilio from 'twilio';
+import { exec } from 'child_process';
+import path from 'path';
 
 type ResponseData = {
   success: boolean;
@@ -34,29 +35,55 @@ export default async function handler(
       });
     }
 
-    try {
-      // Initialize the Twilio client with the provided credentials
-      const client = twilio(config.accountSid, config.authToken);
-      
-      // Send the SMS message
-      const twilioMessage = await client.messages.create({
-        body: message,
-        from: config.phoneNumber,
-        to: phoneNumber
-      });
+    // Path to Python script
+    const scriptPath = path.join(process.cwd(), 'utils', 'send_sms.py');
 
-      return res.status(200).json({
-        success: true,
-        message: 'Το μήνυμα SMS στάλθηκε με επιτυχία',
-        messageId: twilioMessage.sid
-      });
-    } catch (twilioError: any) {
-      console.error('Twilio error:', twilioError);
-      return res.status(400).json({
-        success: false,
-        message: `Σφάλμα Twilio: ${twilioError.message || 'Άγνωστο σφάλμα Twilio'}`
-      });
-    }
+    // Prepare the command - we need to escape the message for the shell
+    const escapedMessage = message.replace(/"/g, '\\"');
+    const configJson = JSON.stringify(config);
+    
+    // Run the Python script as a child process
+    return new Promise((resolve) => {
+      exec(
+        `python3 "${scriptPath}" "${phoneNumber}" "${escapedMessage}" '${configJson}'`,
+        (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Error executing Python script: ${error.message}`);
+            console.error(`stderr: ${stderr}`);
+            return res.status(500).json({
+              success: false,
+              message: `Σφάλμα κατά την εκτέλεση του Python script: ${error.message}`
+            });
+          }
+
+          try {
+            // Parse the output from the Python script
+            const result = JSON.parse(stdout);
+            
+            if (result.success) {
+              return res.status(200).json({
+                success: true,
+                message: 'Το μήνυμα SMS στάλθηκε με επιτυχία',
+                messageId: result.sid
+              });
+            } else {
+              return res.status(400).json({
+                success: false,
+                message: `Σφάλμα Twilio: ${result.error || 'Άγνωστο σφάλμα Twilio'}`
+              });
+            }
+          } catch (parseError) {
+            console.error('Error parsing Python output:', parseError);
+            console.error('Raw output:', stdout);
+            
+            return res.status(500).json({
+              success: false,
+              message: `Σφάλμα κατά την ανάλυση της απόκρισης του Python script: ${parseError.message}`
+            });
+          }
+        }
+      );
+    });
   } catch (error: any) {
     console.error('Error sending SMS:', error);
     return res.status(500).json({

@@ -23,33 +23,52 @@ interface NotificationProviderProps {
 
 export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }) => {
   const [twilioConfig, setTwilioConfig] = useState<TwilioConfig | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
-  // Try to load saved configs from localStorage on initial render
+  // Check if we're on client-side to use localStorage
   useEffect(() => {
-    try {
-      const savedConfig = localStorage.getItem('twilioConfig');
-      if (savedConfig) {
-        setTwilioConfig(JSON.parse(savedConfig));
-      }
-    } catch (error) {
-      console.error('Error loading notification settings:', error);
-    }
+    setIsClient(true);
   }, []);
+
+  // Load Twilio config on initial render
+  useEffect(() => {
+    if (isClient) {
+      try {
+        // Try to get from localStorage
+        const savedConfig = localStorage.getItem('twilioConfig');
+        if (savedConfig) {
+          setTwilioConfig(JSON.parse(savedConfig));
+        }
+      } catch (error) {
+        console.error('Error loading notification settings from localStorage:', error);
+      }
+    }
+  }, [isClient]);
 
   const setSmsConfig = (config: TwilioConfig) => {
     setTwilioConfig(config);
     
     // Save to localStorage for persistence
-    try {
-      localStorage.setItem('twilioConfig', JSON.stringify(config));
-    } catch (error) {
-      console.error('Error saving notification settings:', error);
+    if (isClient) {
+      try {
+        localStorage.setItem('twilioConfig', JSON.stringify(config));
+      } catch (error) {
+        console.error('Error saving notification settings to localStorage:', error);
+      }
     }
   };
 
   const clearSmsConfig = () => {
     setTwilioConfig(null);
-    localStorage.removeItem('twilioConfig');
+    
+    // Clear from localStorage
+    if (isClient) {
+      try {
+        localStorage.removeItem('twilioConfig');
+      } catch (error) {
+        console.error('Error clearing notification settings from localStorage:', error);
+      }
+    }
   };
 
   const isSmsConfigured = !!twilioConfig && 
