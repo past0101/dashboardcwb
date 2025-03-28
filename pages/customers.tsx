@@ -11,19 +11,39 @@ export default function Customers() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showCustomerModal, setShowCustomerModal] = useState<boolean>(false);
-  const [newCustomer, setNewCustomer] = useState<{
-    name: string;
-    email: string;
-    phone: string;
-    type: 'AUTO' | 'MOTO' | 'YACHT' | 'AVIATION';
-    vehicle?: string;
-  }>({
-    name: '',
-    email: '',
-    phone: '',
-    type: 'AUTO',
-    vehicle: ''
-  });
+  // Μεταβλητές κατάστασης για τη φόρμα του νέου πελάτη
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [applicationType, setApplicationType] = useState('');
+  const [vehicle, setVehicle] = useState('');
+  const [vehicleColor, setVehicleColor] = useState('');
+  const [vehicleYear, setVehicleYear] = useState('');
+  const [vehicleCondition, setVehicleCondition] = useState('');
+  const [ceramicProtection, setCeramicProtection] = useState('');
+  const [clientType, setClientType] = useState('INDIVIDUAL');
+  const [address, setAddress] = useState('');
+  const [phoneFixed, setPhoneFixed] = useState('');
+  const [phoneMobile, setPhoneMobile] = useState('');
+
+  // Helper function για reset της φόρμας
+  const resetCustomerForm = () => {
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPhone('');
+    setApplicationType('');
+    setVehicle('');
+    setVehicleColor('');
+    setVehicleYear('');
+    setVehicleCondition('');
+    setCeramicProtection('');
+    setClientType('INDIVIDUAL');
+    setAddress('');
+    setPhoneFixed('');
+    setPhoneMobile('');
+  };
 
   // Filter customers based on search term and type
   const filteredCustomers = customers.filter(customer => {
@@ -329,8 +349,8 @@ export default function Customers() {
 
       {/* Modal για Νέο Πελάτη */}
       {showCustomerModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-lg w-full p-6 relative">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-75 flex items-center justify-center">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-lg w-full p-6">
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white">Προσθήκη Νέου Πελάτη</h3>
               <button
@@ -347,119 +367,276 @@ export default function Customers() {
             <form className="space-y-4" onSubmit={(e) => {
               e.preventDefault();
               // Add the customer if all required fields are filled
-              if (newCustomer.name && newCustomer.email && newCustomer.phone) {
+              if (firstName && lastName && email && phone && applicationType) {
+                const fullName = `${firstName} ${lastName}`;
                 addCustomer({
-                  ...newCustomer,
+                  name: fullName,
+                  email: email,
+                  phone: phone || phoneMobile || phoneFixed,
+                  type: applicationType as 'AUTO' | 'MOTO' | 'YACHT' | 'AVIATION',
+                  vehicle: vehicle,
                   dateAdded: new Date().toLocaleDateString('el-GR')
                 });
                 // Reset form and close modal
-                setNewCustomer({
-                  name: '',
-                  email: '',
-                  phone: '',
-                  type: 'AUTO',
-                  vehicle: ''
-                });
+                resetCustomerForm();
                 setShowCustomerModal(false);
               }
             }}>
               <div className="grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="customer-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label htmlFor="first-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Όνομα *
                   </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="customer-name"
-                      required
-                      className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      value={newCustomer.name}
-                      onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    name="first-name"
+                    id="first-name"
+                    required
+                    className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
                 </div>
-
                 <div>
-                  <label htmlFor="customer-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label htmlFor="last-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Επώνυμο *
+                  </label>
+                  <input
+                    type="text"
+                    name="last-name"
+                    id="last-name"
+                    required
+                    className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Email *
                   </label>
-                  <div className="mt-1">
-                    <input
-                      type="email"
-                      id="customer-email"
-                      required
-                      className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      value={newCustomer.email}
-                      onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
-                    />
-                  </div>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    required
+                    className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
-
                 <div>
-                  <label htmlFor="customer-phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Τηλέφωνο *
                   </label>
-                  <div className="mt-1">
-                    <input
-                      type="tel"
-                      id="customer-phone"
-                      required
-                      className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      value={newCustomer.phone}
-                      onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
-                    />
-                  </div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    id="phone"
+                    required
+                    className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
                 </div>
-
-                <div>
-                  <label htmlFor="customer-type" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Τύπος Οχήματος *
-                  </label>
-                  <div className="mt-1">
-                    <select
-                      id="customer-type"
-                      required
-                      className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      value={newCustomer.type}
-                      onChange={(e) => setNewCustomer({ ...newCustomer, type: e.target.value as 'AUTO' | 'MOTO' | 'YACHT' | 'AVIATION' })}
-                    >
-                      <option value="AUTO">Αυτοκίνητο</option>
-                      <option value="MOTO">Μοτοσυκλέτα</option>
-                      <option value="YACHT">Σκάφος</option>
-                      <option value="AVIATION">Αεροσκάφος</option>
-                    </select>
-                  </div>
-                </div>
-
                 <div className="sm:col-span-2">
-                  <label htmlFor="customer-vehicle" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Περιγραφή Οχήματος
+                  <label htmlFor="application-type" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Τύπος Εφαρμογής *
                   </label>
-                  <div className="mt-1">
-                    <input
-                      type="text"
-                      id="customer-vehicle"
-                      className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                      placeholder="π.χ. Audi A4 2022, BMW F850GS, κλπ."
-                      value={newCustomer.vehicle}
-                      onChange={(e) => setNewCustomer({ ...newCustomer, vehicle: e.target.value })}
-                    />
+                  <select
+                    id="application-type"
+                    name="application-type"
+                    required
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={applicationType}
+                    onChange={(e) => setApplicationType(e.target.value)}
+                  >
+                    <option value="">Επιλέξτε τύπο</option>
+                    <option value="AUTO">Αυτοκίνητο</option>
+                    <option value="MOTO">Μοτοσυκλέτα</option>
+                    <option value="YACHT">Σκάφος</option>
+                    <option value="AVIATION">Αεροσκάφος</option>
+                  </select>
+                </div>
+                <div className="sm:col-span-2">
+                  <label htmlFor="vehicle" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Μάρκα και μοντέλο οχήματος
+                  </label>
+                  <input
+                    type="text"
+                    name="vehicle"
+                    id="vehicle"
+                    className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    placeholder="π.χ. Audi A4 2020"
+                    value={vehicle}
+                    onChange={(e) => setVehicle(e.target.value)}
+                  />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Συμπληρώνεται εφόσον έχετε επιλέξει Αυτοκίνητο ή Μοτοσυκλέτα</p>
+                </div>
+                <div>
+                  <label htmlFor="vehicle-color" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Χρώμα οχήματος
+                  </label>
+                  <input
+                    type="text"
+                    name="vehicle-color"
+                    id="vehicle-color"
+                    className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={vehicleColor}
+                    onChange={(e) => setVehicleColor(e.target.value)}
+                  />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Συμπληρώνεται εφόσον έχετε επιλέξει Αυτοκίνητο ή Μοτοσυκλέτα</p>
+                </div>
+                <div>
+                  <label htmlFor="vehicle-year" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Έτος κατασκευής
+                  </label>
+                  <input
+                    type="number"
+                    name="vehicle-year"
+                    id="vehicle-year"
+                    min="1900"
+                    max="2100"
+                    className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={vehicleYear}
+                    onChange={(e) => setVehicleYear(e.target.value)}
+                  />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Συμπληρώνεται εφόσον έχετε επιλέξει Αυτοκίνητο ή Μοτοσυκλέτα</p>
+                </div>
+                <div className="sm:col-span-2">
+                  <label htmlFor="vehicle-condition" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Κατάσταση οχήματος *
+                  </label>
+                  <select
+                    id="vehicle-condition"
+                    name="vehicle-condition"
+                    required
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={vehicleCondition}
+                    onChange={(e) => setVehicleCondition(e.target.value)}
+                  >
+                    <option value="">Επιλέξτε κατάσταση</option>
+                    <option value="NEW">Καινούργιο</option>
+                    <option value="USED">Μεταχειρισμένο</option>
+                    <option value="PAINT_WORN">Φθαρμένη βαφή</option>
+                  </select>
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Έχω εφαρμόσει παλιότερα κεραμική προστασία
+                  </label>
+                  <div className="mt-2 space-y-2">
+                    <div className="flex items-center">
+                      <input
+                        id="ceramic-other-vehicle"
+                        name="ceramic-protection"
+                        type="radio"
+                        value="other_vehicle"
+                        className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:bg-gray-700 dark:border-gray-600"
+                        checked={ceramicProtection === 'other_vehicle'}
+                        onChange={() => setCeramicProtection('other_vehicle')}
+                      />
+                      <label htmlFor="ceramic-other-vehicle" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                        ΝΑΙ, σε άλλο όχημα
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        id="ceramic-same-vehicle"
+                        name="ceramic-protection"
+                        type="radio"
+                        value="same_vehicle"
+                        className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:bg-gray-700 dark:border-gray-600"
+                        checked={ceramicProtection === 'same_vehicle'}
+                        onChange={() => setCeramicProtection('same_vehicle')}
+                      />
+                      <label htmlFor="ceramic-same-vehicle" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                        ΝΑΙ, στο ίδιο όχημα
+                      </label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        id="ceramic-no"
+                        name="ceramic-protection"
+                        type="radio"
+                        value="no"
+                        className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:bg-gray-700 dark:border-gray-600"
+                        checked={ceramicProtection === 'no'}
+                        onChange={() => setCeramicProtection('no')}
+                      />
+                      <label htmlFor="ceramic-no" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                        ΟΧΙ
+                      </label>
+                    </div>
                   </div>
+                </div>
+                <div className="sm:col-span-2">
+                  <label htmlFor="client-type" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Είμαι
+                  </label>
+                  <select
+                    id="client-type"
+                    name="client-type"
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={clientType}
+                    onChange={(e) => setClientType(e.target.value)}
+                  >
+                    <option value="INDIVIDUAL">Ιδιώτης</option>
+                    <option value="BUSINESS">Επιχείρηση</option>
+                  </select>
+                </div>
+                <div className="sm:col-span-2">
+                  <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Διεύθυνση
+                  </label>
+                  <input
+                    type="text"
+                    name="address"
+                    id="address"
+                    className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone-fixed" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Τηλέφωνο σταθερό
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone-fixed"
+                    id="phone-fixed"
+                    className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={phoneFixed}
+                    onChange={(e) => setPhoneFixed(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone-mobile" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Τηλέφωνο κινητό
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone-mobile"
+                    id="phone-mobile"
+                    className="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    value={phoneMobile}
+                    onChange={(e) => setPhoneMobile(e.target.value)}
+                  />
                 </div>
               </div>
 
-              <div className="flex justify-end mt-4 space-x-3">
+              <div className="mt-5 flex justify-end space-x-3">
                 <button
                   type="button"
-                  className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
+                  className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600"
                   onClick={() => setShowCustomerModal(false)}
                 >
                   Ακύρωση
                 </button>
                 <button
                   type="submit"
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none dark:bg-primary-500 dark:hover:bg-primary-600"
+                  className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-primary-500 dark:hover:bg-primary-600"
                 >
                   Προσθήκη
                 </button>
