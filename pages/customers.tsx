@@ -181,11 +181,11 @@ export default function Customers() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900 dark:text-white font-medium">
-                          {/* Dummy points - would come from actual data */}
-                          {Math.floor(Math.random() * 500)} πόντοι
+                          {/* Dummy points - using fixed values to prevent hydration errors */}
+                          350 πόντοι
                         </div>
                         <div className="text-xs text-primary-600 dark:text-primary-400">
-                          Επίπεδο: {Math.floor(Math.random() * 3) + 1}
+                          Επίπεδο: 2
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
