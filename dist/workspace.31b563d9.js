@@ -52370,7 +52370,7 @@ const Settings = ()=>{
                                                     className: `w-full p-2 border rounded ${!formData.notifications.appointmentReminder ? 'opacity-60' : ''}`,
                                                     children: [
                                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
-                                                            value: 1,
+                                                            value: "1",
                                                             children: "1 \u03CE\u03C1\u03B1"
                                                         }, void 0, false, {
                                                             fileName: "src/pages/Settings.jsx",
@@ -52378,7 +52378,7 @@ const Settings = ()=>{
                                                             columnNumber: 17
                                                         }, undefined),
                                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
-                                                            value: 2,
+                                                            value: "2",
                                                             children: "2 \u03CE\u03C1\u03B5\u03C2"
                                                         }, void 0, false, {
                                                             fileName: "src/pages/Settings.jsx",
@@ -52386,7 +52386,7 @@ const Settings = ()=>{
                                                             columnNumber: 17
                                                         }, undefined),
                                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
-                                                            value: 3,
+                                                            value: "3",
                                                             children: "3 \u03CE\u03C1\u03B5\u03C2"
                                                         }, void 0, false, {
                                                             fileName: "src/pages/Settings.jsx",
@@ -52394,7 +52394,7 @@ const Settings = ()=>{
                                                             columnNumber: 17
                                                         }, undefined),
                                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
-                                                            value: 6,
+                                                            value: "6",
                                                             children: "6 \u03CE\u03C1\u03B5\u03C2"
                                                         }, void 0, false, {
                                                             fileName: "src/pages/Settings.jsx",
@@ -52402,7 +52402,7 @@ const Settings = ()=>{
                                                             columnNumber: 17
                                                         }, undefined),
                                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
-                                                            value: 12,
+                                                            value: "12",
                                                             children: "12 \u03CE\u03C1\u03B5\u03C2"
                                                         }, void 0, false, {
                                                             fileName: "src/pages/Settings.jsx",
@@ -52410,7 +52410,7 @@ const Settings = ()=>{
                                                             columnNumber: 17
                                                         }, undefined),
                                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
-                                                            value: 24,
+                                                            value: "24",
                                                             children: "24 \u03CE\u03C1\u03B5\u03C2"
                                                         }, void 0, false, {
                                                             fileName: "src/pages/Settings.jsx",
@@ -52418,7 +52418,7 @@ const Settings = ()=>{
                                                             columnNumber: 17
                                                         }, undefined),
                                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("option", {
-                                                            value: 48,
+                                                            value: "48",
                                                             children: "2 \u03B7\u03BC\u03AD\u03C1\u03B5\u03C2"
                                                         }, void 0, false, {
                                                             fileName: "src/pages/Settings.jsx",
@@ -53214,69 +53214,6 @@ const Settings = ()=>{
             }, void 0, true, {
                 fileName: "src/pages/Settings.jsx",
                 lineNumber: 549,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("style", {
-                jsx: true,
-                children: `
-        .switch {
-          position: relative;
-          display: inline-block;
-          width: 60px;
-          height: 34px;
-        }
-        
-        .switch input {
-          opacity: 0;
-          width: 0;
-          height: 0;
-        }
-        
-        .slider {
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: #ccc;
-          transition: .4s;
-        }
-        
-        .slider:before {
-          position: absolute;
-          content: "";
-          height: 26px;
-          width: 26px;
-          left: 4px;
-          bottom: 4px;
-          background-color: white;
-          transition: .4s;
-        }
-        
-        input:checked + .slider {
-          background-color: #3b82f6;
-        }
-        
-        input:focus + .slider {
-          box-shadow: 0 0 1px #3b82f6;
-        }
-        
-        input:checked + .slider:before {
-          transform: translateX(26px);
-        }
-        
-        .slider.round {
-          border-radius: 34px;
-        }
-        
-        .slider.round:before {
-          border-radius: 50%;
-        }
-      `
-            }, void 0, false, {
-                fileName: "src/pages/Settings.jsx",
-                lineNumber: 613,
                 columnNumber: 7
             }, undefined)
         ]
