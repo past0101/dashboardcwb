@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/layout/Layout';
 import { useTheme } from '@/context/ThemeContext';
+import { useNotification } from '@/context/NotificationContext';
 import {
   UserIcon,
   BuildingOfficeIcon,
@@ -49,6 +50,8 @@ const notificationSettings = {
 
 export default function Settings() {
   const { theme, toggleTheme } = useTheme();
+  const { twilioConfig, setSmsConfig, clearSmsConfig, isSmsConfigured } = useNotification();
+  
   const [activeTab, setActiveTab] = useState<SettingsTabType>('profile');
   const [personalInfo, setPersonalInfo] = useState({
     firstName: 'Γιώργος',
@@ -70,6 +73,22 @@ export default function Settings() {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [twilioFormData, setTwilioFormData] = useState({
+    accountSid: '',
+    authToken: '',
+    phoneNumber: ''
+  });
+
+  // Initialize Twilio form data from context
+  useEffect(() => {
+    if (twilioConfig) {
+      setTwilioFormData({
+        accountSid: twilioConfig.accountSid || '',
+        authToken: twilioConfig.authToken || '',
+        phoneNumber: twilioConfig.phoneNumber || ''
+      });
+    }
+  }, [twilioConfig]);
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
@@ -91,6 +110,40 @@ export default function Settings() {
   // Navigate to tab
   const navigateToTab = (tab: SettingsTabType) => {
     setActiveTab(tab);
+  };
+  
+  // Handle Twilio settings form submission
+  const handleTwilioSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+    
+    // Save the Twilio settings to context
+    setSmsConfig({
+      accountSid: twilioFormData.accountSid,
+      authToken: twilioFormData.authToken,
+      phoneNumber: twilioFormData.phoneNumber
+    });
+    
+    // Show success message
+    setTimeout(() => {
+      setIsSaving(false);
+      setSaveSuccess(true);
+      
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, 3000);
+    }, 1000);
+  };
+  
+  // Clear Twilio settings
+  const handleClearTwilioSettings = () => {
+    clearSmsConfig();
+    setTwilioFormData({
+      accountSid: '',
+      authToken: '',
+      phoneNumber: ''
+    });
   };
 
   return (
@@ -524,6 +577,117 @@ export default function Settings() {
             {activeTab === 'notifications' && (
               <div className="p-6">
                 <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Ρυθμίσεις Ειδοποιήσεων</h2>
+                
+                {/* Ένδειξη επιτυχίας */}
+                {saveSuccess && (
+                  <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md flex items-center">
+                    <CheckIcon className="h-5 w-5 text-green-500 mr-2" />
+                    <span className="text-sm text-green-700">Οι ρυθμίσεις αποθηκεύτηκαν επιτυχώς!</span>
+                  </div>
+                )}
+                
+                {/* Ρυθμίσεις SMS (Twilio) */}
+                <div className="mb-8 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <h3 className="text-md font-medium text-gray-900 dark:text-white mb-4 flex items-center">
+                    <DevicePhoneMobileIcon className="h-5 w-5 mr-2 text-gray-500 dark:text-gray-400" />
+                    Ρυθμίσεις SMS (Twilio)
+                  </h3>
+                  
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                      Ρυθμίστε τα στοιχεία του Twilio για να στέλνετε SMS ειδοποιήσεις στους πελάτες σας.
+                    </p>
+                    <div className="flex items-center">
+                      <div className={`${isSmsConfigured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'} dark:bg-gray-800 px-2 py-1 rounded text-xs flex items-center`}>
+                        {isSmsConfigured ? (
+                          <>
+                            <CheckIcon className="h-4 w-4 mr-1 text-green-500" />
+                            <span>Ρυθμισμένο</span>
+                          </>
+                        ) : (
+                          <>
+                            <ExclamationTriangleIcon className="h-4 w-4 mr-1 text-yellow-500" />
+                            <span>Μη ρυθμισμένο</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <form onSubmit={handleTwilioSubmit} className="space-y-4">
+                    <div>
+                      <label htmlFor="account-sid" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Account SID
+                      </label>
+                      <div className="mt-1">
+                        <input
+                          type="text"
+                          name="account-sid"
+                          id="account-sid"
+                          className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+                          value={twilioFormData.accountSid}
+                          onChange={(e) => setTwilioFormData({...twilioFormData, accountSid: e.target.value})}
+                          placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="auth-token" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Auth Token
+                      </label>
+                      <div className="mt-1">
+                        <input
+                          type="password"
+                          name="auth-token"
+                          id="auth-token"
+                          className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+                          value={twilioFormData.authToken}
+                          onChange={(e) => setTwilioFormData({...twilioFormData, authToken: e.target.value})}
+                          placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="phone-number" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Αριθμός Τηλεφώνου Twilio
+                      </label>
+                      <div className="mt-1">
+                        <input
+                          type="text"
+                          name="phone-number"
+                          id="phone-number"
+                          className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+                          value={twilioFormData.phoneNumber}
+                          onChange={(e) => setTwilioFormData({...twilioFormData, phoneNumber: e.target.value})}
+                          placeholder="+1234567890"
+                        />
+                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          Συμπεριλάβετε τον κωδικό χώρας (π.χ. +30 για Ελλάδα)
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-end space-x-3 mt-4">
+                      <button
+                        type="button"
+                        onClick={handleClearTwilioSettings}
+                        className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600"
+                      >
+                        <TrashIcon className="h-4 w-4 mr-1" />
+                        Καθαρισμός
+                      </button>
+                      <button
+                        type="submit"
+                        className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none dark:bg-primary-500 dark:hover:bg-primary-600"
+                        disabled={isSaving}
+                      >
+                        {isSaving ? 'Αποθήκευση...' : 'Αποθήκευση'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
                 
                 <div className="space-y-6">
                   <div>

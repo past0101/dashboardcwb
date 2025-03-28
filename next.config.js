@@ -11,6 +11,10 @@ const nextConfig = {
     locales: ['el'],
     defaultLocale: 'el',
   },
+  // Server settings
+  experimental: {
+    allowedDevOrigins: ['.replit.dev', '.repl.co', '.worf.replit.dev'],
+  },
 };
 
 module.exports = nextConfig;
