@@ -89,10 +89,10 @@ export const initialData = {
   staff: [
     {
       id: '1',
-      name: 'Ελένη Παππά',
-      email: 'epappa@example.com',
+      name: 'Γιάννης Αντωνίου',
+      email: 'gantonioiu@example.com',
       phone: '6945678901',
-      position: 'Στυλίστρια',
+      position: 'Εξειδικευμένος Τεχνικός AUTO',
       schedule: {
         monday: { start: '09:00', end: '17:00' },
         tuesday: { start: '09:00', end: '17:00' },
@@ -106,10 +106,10 @@ export const initialData = {
     },
     {
       id: '2',
-      name: 'Νίκος Βασιλείου',
-      email: 'nvasiliou@example.com',
+      name: 'Κώστας Δημητρίου',
+      email: 'kdimitriou@example.com',
       phone: '6956789012',
-      position: 'Τεχνίτης',
+      position: 'Τεχνικός MOTO/YACHT',
       schedule: {
         monday: { start: '09:00', end: '17:00' },
         tuesday: { start: '09:00', end: '17:00' },
@@ -123,10 +123,10 @@ export const initialData = {
     },
     {
       id: '3',
-      name: 'Σοφία Γεωργίου',
-      email: 'sgeorgiou@example.com',
+      name: 'Μαρία Παπαδοπούλου',
+      email: 'mpapadopoulou@example.com',
       phone: '6967890123',
-      position: 'Βοηθός',
+      position: 'Ειδικός Εφαρμογών AVIATION',
       schedule: {
         monday: { start: '12:00', end: '20:00' },
         tuesday: { start: '12:00', end: '20:00' },
@@ -137,6 +137,23 @@ export const initialData = {
         sunday: { start: '', end: '' }
       },
       createdAt: '2023-01-10T11:45:00.000Z'
+    },
+    {
+      id: '4',
+      name: 'Νίκος Ιωάννου',
+      email: 'nioannou@example.com',
+      phone: '6978901234',
+      position: 'Βοηθός Τεχνικός',
+      schedule: {
+        monday: { start: '09:00', end: '17:00' },
+        tuesday: { start: '09:00', end: '17:00' },
+        wednesday: { start: '09:00', end: '17:00' },
+        thursday: { start: '09:00', end: '17:00' },
+        friday: { start: '09:00', end: '17:00' },
+        saturday: { start: '10:00', end: '15:00' },
+        sunday: { start: '', end: '' }
+      },
+      createdAt: '2023-02-15T09:30:00.000Z'
     }
   ],
   
@@ -144,39 +161,48 @@ export const initialData = {
   services: [
     {
       id: '1',
-      name: 'Κούρεμα',
-      description: 'Βασικό κούρεμα με ψαλίδι',
-      duration: 30, // in minutes
-      price: 15.00,
+      name: 'AUTO Ceramic Coating - Basic',
+      description: 'Βασική κεραμική επικάλυψη για αυτοκίνητα, προστασία 6 μηνών',
+      duration: 180, // in minutes
+      price: 150.00,
       categoryId: '1',
       createdAt: '2022-11-01T10:00:00.000Z'
     },
     {
       id: '2',
-      name: 'Βαφή',
-      description: 'Πλήρης βαφή μαλλιών',
-      duration: 90, // in minutes
-      price: 45.00,
+      name: 'AUTO Ceramic Coating - Premium',
+      description: 'Πλήρης κεραμική επικάλυψη για αυτοκίνητα, προστασία 12 μηνών',
+      duration: 300, // in minutes
+      price: 250.00,
       categoryId: '1',
       createdAt: '2022-11-01T10:15:00.000Z'
     },
     {
       id: '3',
-      name: 'Μανικιούρ',
-      description: 'Βασικό μανικιούρ',
-      duration: 30, // in minutes
-      price: 20.00,
+      name: 'MOTO Ceramic Coating',
+      description: 'Κεραμική επικάλυψη για μοτοσυκλέτες',
+      duration: 120, // in minutes
+      price: 120.00,
       categoryId: '2',
       createdAt: '2022-11-01T10:30:00.000Z'
     },
     {
       id: '4',
-      name: 'Πεντικιούρ',
-      description: 'Πλήρες πεντικιούρ',
-      duration: 45, // in minutes
-      price: 25.00,
-      categoryId: '2',
+      name: 'YACHT Ceramic Coating',
+      description: 'Κεραμική επικάλυψη για σκάφη, ανθεκτική στο αλμυρό νερό',
+      duration: 480, // in minutes
+      price: 800.00,
+      categoryId: '3',
       createdAt: '2022-11-01T10:45:00.000Z'
+    },
+    {
+      id: '5',
+      name: 'AVIATION Ceramic Coating',
+      description: 'Εξειδικευμένη κεραμική επικάλυψη για αεροσκάφη',
+      duration: 720, // in minutes
+      price: 1500.00,
+      categoryId: '4',
+      createdAt: '2022-11-01T11:00:00.000Z'
     }
   ],
   
@@ -184,18 +210,23 @@ export const initialData = {
   serviceCategories: [
     {
       id: '1',
-      name: 'Μαλλιά',
+      name: 'AUTO',
       createdAt: '2022-10-15T09:30:00.000Z'
     },
     {
       id: '2',
-      name: 'Νύχια',
+      name: 'MOTO',
       createdAt: '2022-10-15T09:45:00.000Z'
     },
     {
       id: '3',
-      name: 'Πρόσωπο',
+      name: 'YACHT',
       createdAt: '2022-10-15T10:00:00.000Z'
+    },
+    {
+      id: '4',
+      name: 'AVIATION',
+      createdAt: '2022-10-15T10:15:00.000Z'
     }
   ],
   
@@ -203,30 +234,48 @@ export const initialData = {
   products: [
     {
       id: '1',
-      name: 'Σαμπουάν',
-      description: 'Επαγγελματικό σαμπουάν για όλους τους τύπους μαλλιών',
-      price: 12.50,
-      stock: 25,
+      name: 'Ceramic Pro 9H',
+      description: 'Επαγγελματικό κεραμικό προϊόν 9H ανώτατης προστασίας',
+      price: 89.50,
+      stock: 15,
       categoryId: '1',
       createdAt: '2022-11-15T11:00:00.000Z'
     },
     {
       id: '2',
-      name: 'Κρέμα μαλλιών',
-      description: 'Επαγγελματική κρέμα για ξηρά μαλλιά',
-      price: 14.00,
-      stock: 18,
+      name: 'Ceramic Pro Light',
+      description: 'Ελαφρύ κεραμικό προϊόν για γρήγορη εφαρμογή',
+      price: 45.00,
+      stock: 22,
       categoryId: '1',
       createdAt: '2022-11-15T11:15:00.000Z'
     },
     {
       id: '3',
-      name: 'Βερνίκι νυχιών',
-      description: 'Υψηλής ποιότητας βερνίκι μακράς διαρκείας',
-      price: 8.50,
+      name: 'Ceramic Pro Top Coat',
+      description: 'Προϊόν τελικής επίστρωσης για μέγιστη γυαλάδα',
+      price: 38.50,
+      stock: 28,
+      categoryId: '1',
+      createdAt: '2022-11-15T11:30:00.000Z'
+    },
+    {
+      id: '4',
+      name: 'Nano Polish',
+      description: 'Ειδικό γυαλιστικό νανοτεχνολογίας',
+      price: 29.99,
       stock: 32,
       categoryId: '2',
-      createdAt: '2022-11-15T11:30:00.000Z'
+      createdAt: '2022-11-15T11:45:00.000Z'
+    },
+    {
+      id: '5',
+      name: 'Ceramic Pro Marine',
+      description: 'Ειδική σύνθεση για χρήση σε σκάφη',
+      price: 120.00,
+      stock: 8,
+      categoryId: '3',
+      createdAt: '2022-11-15T12:00:00.000Z'
     }
   ],
   
@@ -234,18 +283,23 @@ export const initialData = {
   productCategories: [
     {
       id: '1',
-      name: 'Προϊόντα Μαλλιών',
+      name: 'Κεραμικά Προϊόντα',
       createdAt: '2022-10-20T10:00:00.000Z'
     },
     {
       id: '2',
-      name: 'Προϊόντα Νυχιών',
+      name: 'Προϊόντα Γυαλίσματος',
       createdAt: '2022-10-20T10:15:00.000Z'
     },
     {
       id: '3',
-      name: 'Προϊόντα Προσώπου',
+      name: 'Ειδικές Εφαρμογές',
       createdAt: '2022-10-20T10:30:00.000Z'
+    },
+    {
+      id: '4',
+      name: 'Εργαλεία Εφαρμογής',
+      createdAt: '2022-10-20T10:45:00.000Z'
     }
   ],
   
@@ -256,11 +310,11 @@ export const initialData = {
       customerId: '1',
       staffId: '1',
       items: [
-        { type: 'service', id: '1', quantity: 1, price: 15.00 },
-        { type: 'product', id: '1', quantity: 1, price: 12.50 }
+        { type: 'service', id: '1', quantity: 1, price: 150.00 },
+        { type: 'product', id: '1', quantity: 1, price: 89.50 }
       ],
-      total: 27.50,
-      paymentMethod: 'cash',
+      total: 239.50,
+      paymentMethod: 'card',
       date: '2023-07-01T11:30:00.000Z'
     },
     {
@@ -268,10 +322,10 @@ export const initialData = {
       customerId: '2',
       staffId: '2',
       items: [
-        { type: 'service', id: '3', quantity: 1, price: 20.00 },
-        { type: 'service', id: '4', quantity: 1, price: 25.00 }
+        { type: 'service', id: '3', quantity: 1, price: 120.00 },
+        { type: 'product', id: '4', quantity: 1, price: 29.99 }
       ],
-      total: 45.00,
+      total: 149.99,
       paymentMethod: 'card',
       date: '2023-07-02T15:45:00.000Z'
     },
@@ -280,12 +334,36 @@ export const initialData = {
       customerId: '3',
       staffId: '1',
       items: [
-        { type: 'service', id: '2', quantity: 1, price: 45.00 },
-        { type: 'product', id: '2', quantity: 1, price: 14.00 }
+        { type: 'service', id: '2', quantity: 1, price: 250.00 },
+        { type: 'product', id: '2', quantity: 1, price: 45.00 }
       ],
-      total: 59.00,
+      total: 295.00,
       paymentMethod: 'card',
       date: '2023-07-03T14:20:00.000Z'
+    },
+    {
+      id: '4',
+      customerId: '1',
+      staffId: '3',
+      items: [
+        { type: 'service', id: '5', quantity: 1, price: 1500.00 },
+        { type: 'product', id: '5', quantity: 2, price: 120.00 }
+      ],
+      total: 1740.00,
+      paymentMethod: 'transfer',
+      date: '2023-07-05T10:15:00.000Z'
+    },
+    {
+      id: '5',
+      customerId: '2',
+      staffId: '4',
+      items: [
+        { type: 'service', id: '4', quantity: 1, price: 800.00 },
+        { type: 'product', id: '5', quantity: 1, price: 120.00 }
+      ],
+      total: 920.00,
+      paymentMethod: 'card',
+      date: '2023-07-07T13:45:00.000Z'
     }
   ],
   
@@ -295,46 +373,76 @@ export const initialData = {
       id: '1',
       customerId: '1',
       items: [
-        { type: 'service', id: '1', quantity: 1, price: 15.00 },
-        { type: 'product', id: '1', quantity: 1, price: 12.50 }
+        { type: 'service', id: '1', quantity: 1, price: 150.00 },
+        { type: 'product', id: '1', quantity: 1, price: 89.50 }
       ],
-      subtotal: 27.50,
-      tax: 6.60,
-      total: 34.10,
+      subtotal: 239.50,
+      tax: 57.48,
+      total: 296.98,
       date: '2023-07-01T11:35:00.000Z',
       dueDate: '2023-07-15T00:00:00.000Z',
       status: 'paid',
-      notes: ''
+      notes: 'AUTO Ceramic Coating Basic + Ceramic Pro 9H'
     },
     {
       id: '2',
       customerId: '2',
       items: [
-        { type: 'service', id: '3', quantity: 1, price: 20.00 },
-        { type: 'service', id: '4', quantity: 1, price: 25.00 }
+        { type: 'service', id: '3', quantity: 1, price: 120.00 },
+        { type: 'product', id: '4', quantity: 1, price: 29.99 }
       ],
-      subtotal: 45.00,
-      tax: 10.80,
-      total: 55.80,
+      subtotal: 149.99,
+      tax: 36.00,
+      total: 185.99,
       date: '2023-07-02T15:50:00.000Z',
       dueDate: '2023-07-16T00:00:00.000Z',
       status: 'paid',
-      notes: ''
+      notes: 'MOTO Ceramic Coating'
     },
     {
       id: '3',
       customerId: '3',
       items: [
-        { type: 'service', id: '2', quantity: 1, price: 45.00 },
-        { type: 'product', id: '2', quantity: 1, price: 14.00 }
+        { type: 'service', id: '2', quantity: 1, price: 250.00 },
+        { type: 'product', id: '2', quantity: 1, price: 45.00 }
       ],
-      subtotal: 59.00,
-      tax: 14.16,
-      total: 73.16,
+      subtotal: 295.00,
+      tax: 70.80,
+      total: 365.80,
       date: '2023-07-03T14:25:00.000Z',
       dueDate: '2023-07-17T00:00:00.000Z',
       status: 'unpaid',
-      notes: ''
+      notes: 'AUTO Ceramic Coating Premium'
+    },
+    {
+      id: '4',
+      customerId: '1',
+      items: [
+        { type: 'service', id: '5', quantity: 1, price: 1500.00 },
+        { type: 'product', id: '5', quantity: 2, price: 120.00 }
+      ],
+      subtotal: 1740.00,
+      tax: 417.60,
+      total: 2157.60,
+      date: '2023-07-05T10:20:00.000Z',
+      dueDate: '2023-07-19T00:00:00.000Z',
+      status: 'paid',
+      notes: 'AVIATION Ceramic Coating για ιδιωτικό αεροσκάφος'
+    },
+    {
+      id: '5',
+      customerId: '2',
+      items: [
+        { type: 'service', id: '4', quantity: 1, price: 800.00 },
+        { type: 'product', id: '5', quantity: 1, price: 120.00 }
+      ],
+      subtotal: 920.00,
+      tax: 220.80,
+      total: 1140.80,
+      date: '2023-07-07T13:50:00.000Z',
+      dueDate: '2023-07-21T00:00:00.000Z',
+      status: 'unpaid',
+      notes: 'YACHT Ceramic Coating για σκάφος 12 μέτρων'
     }
   ],
   
@@ -372,25 +480,25 @@ export const initialData = {
   // Application settings
   settings: {
     businessInfo: {
-      name: 'Beauty Salon',
-      address: 'Λεωφόρος Αλεξάνδρας 45, Αθήνα',
-      phone: '2101234567',
-      email: 'info@beautysalon.gr',
-      website: 'www.beautysalon.gr',
+      name: 'Ceramic Pro Studio',
+      address: 'Λεωφόρος Μεσογείων 265, Αθήνα',
+      phone: '2106547890',
+      email: 'info@ceramicprostudio.gr',
+      website: 'www.ceramicprostudio.gr',
       taxId: '123456789'
     },
     businessHours: {
-      monday: { open: '09:00', close: '20:00' },
-      tuesday: { open: '09:00', close: '20:00' },
-      wednesday: { open: '09:00', close: '20:00' },
-      thursday: { open: '09:00', close: '20:00' },
-      friday: { open: '09:00', close: '20:00' },
+      monday: { open: '09:00', close: '18:00' },
+      tuesday: { open: '09:00', close: '18:00' },
+      wednesday: { open: '09:00', close: '18:00' },
+      thursday: { open: '09:00', close: '18:00' },
+      friday: { open: '09:00', close: '18:00' },
       saturday: { open: '10:00', close: '16:00' },
       sunday: { open: '', close: '' }
     },
     notifications: {
       email: true,
-      sms: false,
+      sms: true,
       appointmentReminder: true,
       reminderTime: 24 // hours before appointment
     }

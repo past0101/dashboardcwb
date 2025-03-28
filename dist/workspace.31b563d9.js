@@ -28928,10 +28928,10 @@ const initialData = {
     staff: [
         {
             id: '1',
-            name: "\u0395\u03BB\u03AD\u03BD\u03B7 \u03A0\u03B1\u03C0\u03C0\u03AC",
-            email: 'epappa@example.com',
+            name: "\u0393\u03B9\u03AC\u03BD\u03BD\u03B7\u03C2 \u0391\u03BD\u03C4\u03C9\u03BD\u03AF\u03BF\u03C5",
+            email: 'gantonioiu@example.com',
             phone: '6945678901',
-            position: "\u03A3\u03C4\u03C5\u03BB\u03AF\u03C3\u03C4\u03C1\u03B9\u03B1",
+            position: "\u0395\u03BE\u03B5\u03B9\u03B4\u03B9\u03BA\u03B5\u03C5\u03BC\u03AD\u03BD\u03BF\u03C2 \u03A4\u03B5\u03C7\u03BD\u03B9\u03BA\u03CC\u03C2 AUTO",
             schedule: {
                 monday: {
                     start: '09:00',
@@ -28966,10 +28966,10 @@ const initialData = {
         },
         {
             id: '2',
-            name: "\u039D\u03AF\u03BA\u03BF\u03C2 \u0392\u03B1\u03C3\u03B9\u03BB\u03B5\u03AF\u03BF\u03C5",
-            email: 'nvasiliou@example.com',
+            name: "\u039A\u03CE\u03C3\u03C4\u03B1\u03C2 \u0394\u03B7\u03BC\u03B7\u03C4\u03C1\u03AF\u03BF\u03C5",
+            email: 'kdimitriou@example.com',
             phone: '6956789012',
-            position: "\u03A4\u03B5\u03C7\u03BD\u03AF\u03C4\u03B7\u03C2",
+            position: "\u03A4\u03B5\u03C7\u03BD\u03B9\u03BA\u03CC\u03C2 MOTO/YACHT",
             schedule: {
                 monday: {
                     start: '09:00',
@@ -29004,10 +29004,10 @@ const initialData = {
         },
         {
             id: '3',
-            name: "\u03A3\u03BF\u03C6\u03AF\u03B1 \u0393\u03B5\u03C9\u03C1\u03B3\u03AF\u03BF\u03C5",
-            email: 'sgeorgiou@example.com',
+            name: "\u039C\u03B1\u03C1\u03AF\u03B1 \u03A0\u03B1\u03C0\u03B1\u03B4\u03BF\u03C0\u03BF\u03CD\u03BB\u03BF\u03C5",
+            email: 'mpapadopoulou@example.com',
             phone: '6967890123',
-            position: "\u0392\u03BF\u03B7\u03B8\u03CC\u03C2",
+            position: "\u0395\u03B9\u03B4\u03B9\u03BA\u03CC\u03C2 \u0395\u03C6\u03B1\u03C1\u03BC\u03BF\u03B3\u03CE\u03BD AVIATION",
             schedule: {
                 monday: {
                     start: '12:00',
@@ -29039,111 +29039,186 @@ const initialData = {
                 }
             },
             createdAt: '2023-01-10T11:45:00.000Z'
+        },
+        {
+            id: '4',
+            name: "\u039D\u03AF\u03BA\u03BF\u03C2 \u0399\u03C9\u03AC\u03BD\u03BD\u03BF\u03C5",
+            email: 'nioannou@example.com',
+            phone: '6978901234',
+            position: "\u0392\u03BF\u03B7\u03B8\u03CC\u03C2 \u03A4\u03B5\u03C7\u03BD\u03B9\u03BA\u03CC\u03C2",
+            schedule: {
+                monday: {
+                    start: '09:00',
+                    end: '17:00'
+                },
+                tuesday: {
+                    start: '09:00',
+                    end: '17:00'
+                },
+                wednesday: {
+                    start: '09:00',
+                    end: '17:00'
+                },
+                thursday: {
+                    start: '09:00',
+                    end: '17:00'
+                },
+                friday: {
+                    start: '09:00',
+                    end: '17:00'
+                },
+                saturday: {
+                    start: '10:00',
+                    end: '15:00'
+                },
+                sunday: {
+                    start: '',
+                    end: ''
+                }
+            },
+            createdAt: '2023-02-15T09:30:00.000Z'
         }
     ],
     // Sample services
     services: [
         {
             id: '1',
-            name: "\u039A\u03BF\u03CD\u03C1\u03B5\u03BC\u03B1",
-            description: "\u0392\u03B1\u03C3\u03B9\u03BA\u03CC \u03BA\u03BF\u03CD\u03C1\u03B5\u03BC\u03B1 \u03BC\u03B5 \u03C8\u03B1\u03BB\u03AF\u03B4\u03B9",
-            duration: 30,
-            price: 15.00,
+            name: 'AUTO Ceramic Coating - Basic',
+            description: "\u0392\u03B1\u03C3\u03B9\u03BA\u03AE \u03BA\u03B5\u03C1\u03B1\u03BC\u03B9\u03BA\u03AE \u03B5\u03C0\u03B9\u03BA\u03AC\u03BB\u03C5\u03C8\u03B7 \u03B3\u03B9\u03B1 \u03B1\u03C5\u03C4\u03BF\u03BA\u03AF\u03BD\u03B7\u03C4\u03B1, \u03C0\u03C1\u03BF\u03C3\u03C4\u03B1\u03C3\u03AF\u03B1 6 \u03BC\u03B7\u03BD\u03CE\u03BD",
+            duration: 180,
+            price: 150.00,
             categoryId: '1',
             createdAt: '2022-11-01T10:00:00.000Z'
         },
         {
             id: '2',
-            name: "\u0392\u03B1\u03C6\u03AE",
-            description: "\u03A0\u03BB\u03AE\u03C1\u03B7\u03C2 \u03B2\u03B1\u03C6\u03AE \u03BC\u03B1\u03BB\u03BB\u03B9\u03CE\u03BD",
-            duration: 90,
-            price: 45.00,
+            name: 'AUTO Ceramic Coating - Premium',
+            description: "\u03A0\u03BB\u03AE\u03C1\u03B7\u03C2 \u03BA\u03B5\u03C1\u03B1\u03BC\u03B9\u03BA\u03AE \u03B5\u03C0\u03B9\u03BA\u03AC\u03BB\u03C5\u03C8\u03B7 \u03B3\u03B9\u03B1 \u03B1\u03C5\u03C4\u03BF\u03BA\u03AF\u03BD\u03B7\u03C4\u03B1, \u03C0\u03C1\u03BF\u03C3\u03C4\u03B1\u03C3\u03AF\u03B1 12 \u03BC\u03B7\u03BD\u03CE\u03BD",
+            duration: 300,
+            price: 250.00,
             categoryId: '1',
             createdAt: '2022-11-01T10:15:00.000Z'
         },
         {
             id: '3',
-            name: "\u039C\u03B1\u03BD\u03B9\u03BA\u03B9\u03BF\u03CD\u03C1",
-            description: "\u0392\u03B1\u03C3\u03B9\u03BA\u03CC \u03BC\u03B1\u03BD\u03B9\u03BA\u03B9\u03BF\u03CD\u03C1",
-            duration: 30,
-            price: 20.00,
+            name: 'MOTO Ceramic Coating',
+            description: "\u039A\u03B5\u03C1\u03B1\u03BC\u03B9\u03BA\u03AE \u03B5\u03C0\u03B9\u03BA\u03AC\u03BB\u03C5\u03C8\u03B7 \u03B3\u03B9\u03B1 \u03BC\u03BF\u03C4\u03BF\u03C3\u03C5\u03BA\u03BB\u03AD\u03C4\u03B5\u03C2",
+            duration: 120,
+            price: 120.00,
             categoryId: '2',
             createdAt: '2022-11-01T10:30:00.000Z'
         },
         {
             id: '4',
-            name: "\u03A0\u03B5\u03BD\u03C4\u03B9\u03BA\u03B9\u03BF\u03CD\u03C1",
-            description: "\u03A0\u03BB\u03AE\u03C1\u03B5\u03C2 \u03C0\u03B5\u03BD\u03C4\u03B9\u03BA\u03B9\u03BF\u03CD\u03C1",
-            duration: 45,
-            price: 25.00,
-            categoryId: '2',
+            name: 'YACHT Ceramic Coating',
+            description: "\u039A\u03B5\u03C1\u03B1\u03BC\u03B9\u03BA\u03AE \u03B5\u03C0\u03B9\u03BA\u03AC\u03BB\u03C5\u03C8\u03B7 \u03B3\u03B9\u03B1 \u03C3\u03BA\u03AC\u03C6\u03B7, \u03B1\u03BD\u03B8\u03B5\u03BA\u03C4\u03B9\u03BA\u03AE \u03C3\u03C4\u03BF \u03B1\u03BB\u03BC\u03C5\u03C1\u03CC \u03BD\u03B5\u03C1\u03CC",
+            duration: 480,
+            price: 800.00,
+            categoryId: '3',
             createdAt: '2022-11-01T10:45:00.000Z'
+        },
+        {
+            id: '5',
+            name: 'AVIATION Ceramic Coating',
+            description: "\u0395\u03BE\u03B5\u03B9\u03B4\u03B9\u03BA\u03B5\u03C5\u03BC\u03AD\u03BD\u03B7 \u03BA\u03B5\u03C1\u03B1\u03BC\u03B9\u03BA\u03AE \u03B5\u03C0\u03B9\u03BA\u03AC\u03BB\u03C5\u03C8\u03B7 \u03B3\u03B9\u03B1 \u03B1\u03B5\u03C1\u03BF\u03C3\u03BA\u03AC\u03C6\u03B7",
+            duration: 720,
+            price: 1500.00,
+            categoryId: '4',
+            createdAt: '2022-11-01T11:00:00.000Z'
         }
     ],
     // Service categories
     serviceCategories: [
         {
             id: '1',
-            name: "\u039C\u03B1\u03BB\u03BB\u03B9\u03AC",
+            name: 'AUTO',
             createdAt: '2022-10-15T09:30:00.000Z'
         },
         {
             id: '2',
-            name: "\u039D\u03CD\u03C7\u03B9\u03B1",
+            name: 'MOTO',
             createdAt: '2022-10-15T09:45:00.000Z'
         },
         {
             id: '3',
-            name: "\u03A0\u03C1\u03CC\u03C3\u03C9\u03C0\u03BF",
+            name: 'YACHT',
             createdAt: '2022-10-15T10:00:00.000Z'
+        },
+        {
+            id: '4',
+            name: 'AVIATION',
+            createdAt: '2022-10-15T10:15:00.000Z'
         }
     ],
     // Sample products
     products: [
         {
             id: '1',
-            name: "\u03A3\u03B1\u03BC\u03C0\u03BF\u03C5\u03AC\u03BD",
-            description: "\u0395\u03C0\u03B1\u03B3\u03B3\u03B5\u03BB\u03BC\u03B1\u03C4\u03B9\u03BA\u03CC \u03C3\u03B1\u03BC\u03C0\u03BF\u03C5\u03AC\u03BD \u03B3\u03B9\u03B1 \u03CC\u03BB\u03BF\u03C5\u03C2 \u03C4\u03BF\u03C5\u03C2 \u03C4\u03CD\u03C0\u03BF\u03C5\u03C2 \u03BC\u03B1\u03BB\u03BB\u03B9\u03CE\u03BD",
-            price: 12.50,
-            stock: 25,
+            name: 'Ceramic Pro 9H',
+            description: "\u0395\u03C0\u03B1\u03B3\u03B3\u03B5\u03BB\u03BC\u03B1\u03C4\u03B9\u03BA\u03CC \u03BA\u03B5\u03C1\u03B1\u03BC\u03B9\u03BA\u03CC \u03C0\u03C1\u03BF\u03CA\u03CC\u03BD 9H \u03B1\u03BD\u03CE\u03C4\u03B1\u03C4\u03B7\u03C2 \u03C0\u03C1\u03BF\u03C3\u03C4\u03B1\u03C3\u03AF\u03B1\u03C2",
+            price: 89.50,
+            stock: 15,
             categoryId: '1',
             createdAt: '2022-11-15T11:00:00.000Z'
         },
         {
             id: '2',
-            name: "\u039A\u03C1\u03AD\u03BC\u03B1 \u03BC\u03B1\u03BB\u03BB\u03B9\u03CE\u03BD",
-            description: "\u0395\u03C0\u03B1\u03B3\u03B3\u03B5\u03BB\u03BC\u03B1\u03C4\u03B9\u03BA\u03AE \u03BA\u03C1\u03AD\u03BC\u03B1 \u03B3\u03B9\u03B1 \u03BE\u03B7\u03C1\u03AC \u03BC\u03B1\u03BB\u03BB\u03B9\u03AC",
-            price: 14.00,
-            stock: 18,
+            name: 'Ceramic Pro Light',
+            description: "\u0395\u03BB\u03B1\u03C6\u03C1\u03CD \u03BA\u03B5\u03C1\u03B1\u03BC\u03B9\u03BA\u03CC \u03C0\u03C1\u03BF\u03CA\u03CC\u03BD \u03B3\u03B9\u03B1 \u03B3\u03C1\u03AE\u03B3\u03BF\u03C1\u03B7 \u03B5\u03C6\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE",
+            price: 45.00,
+            stock: 22,
             categoryId: '1',
             createdAt: '2022-11-15T11:15:00.000Z'
         },
         {
             id: '3',
-            name: "\u0392\u03B5\u03C1\u03BD\u03AF\u03BA\u03B9 \u03BD\u03C5\u03C7\u03B9\u03CE\u03BD",
-            description: "\u03A5\u03C8\u03B7\u03BB\u03AE\u03C2 \u03C0\u03BF\u03B9\u03CC\u03C4\u03B7\u03C4\u03B1\u03C2 \u03B2\u03B5\u03C1\u03BD\u03AF\u03BA\u03B9 \u03BC\u03B1\u03BA\u03C1\u03AC\u03C2 \u03B4\u03B9\u03B1\u03C1\u03BA\u03B5\u03AF\u03B1\u03C2",
-            price: 8.50,
+            name: 'Ceramic Pro Top Coat',
+            description: "\u03A0\u03C1\u03BF\u03CA\u03CC\u03BD \u03C4\u03B5\u03BB\u03B9\u03BA\u03AE\u03C2 \u03B5\u03C0\u03AF\u03C3\u03C4\u03C1\u03C9\u03C3\u03B7\u03C2 \u03B3\u03B9\u03B1 \u03BC\u03AD\u03B3\u03B9\u03C3\u03C4\u03B7 \u03B3\u03C5\u03B1\u03BB\u03AC\u03B4\u03B1",
+            price: 38.50,
+            stock: 28,
+            categoryId: '1',
+            createdAt: '2022-11-15T11:30:00.000Z'
+        },
+        {
+            id: '4',
+            name: 'Nano Polish',
+            description: "\u0395\u03B9\u03B4\u03B9\u03BA\u03CC \u03B3\u03C5\u03B1\u03BB\u03B9\u03C3\u03C4\u03B9\u03BA\u03CC \u03BD\u03B1\u03BD\u03BF\u03C4\u03B5\u03C7\u03BD\u03BF\u03BB\u03BF\u03B3\u03AF\u03B1\u03C2",
+            price: 29.99,
             stock: 32,
             categoryId: '2',
-            createdAt: '2022-11-15T11:30:00.000Z'
+            createdAt: '2022-11-15T11:45:00.000Z'
+        },
+        {
+            id: '5',
+            name: 'Ceramic Pro Marine',
+            description: "\u0395\u03B9\u03B4\u03B9\u03BA\u03AE \u03C3\u03CD\u03BD\u03B8\u03B5\u03C3\u03B7 \u03B3\u03B9\u03B1 \u03C7\u03C1\u03AE\u03C3\u03B7 \u03C3\u03B5 \u03C3\u03BA\u03AC\u03C6\u03B7",
+            price: 120.00,
+            stock: 8,
+            categoryId: '3',
+            createdAt: '2022-11-15T12:00:00.000Z'
         }
     ],
     // Product categories
     productCategories: [
         {
             id: '1',
-            name: "\u03A0\u03C1\u03BF\u03CA\u03CC\u03BD\u03C4\u03B1 \u039C\u03B1\u03BB\u03BB\u03B9\u03CE\u03BD",
+            name: "\u039A\u03B5\u03C1\u03B1\u03BC\u03B9\u03BA\u03AC \u03A0\u03C1\u03BF\u03CA\u03CC\u03BD\u03C4\u03B1",
             createdAt: '2022-10-20T10:00:00.000Z'
         },
         {
             id: '2',
-            name: "\u03A0\u03C1\u03BF\u03CA\u03CC\u03BD\u03C4\u03B1 \u039D\u03C5\u03C7\u03B9\u03CE\u03BD",
+            name: "\u03A0\u03C1\u03BF\u03CA\u03CC\u03BD\u03C4\u03B1 \u0393\u03C5\u03B1\u03BB\u03AF\u03C3\u03BC\u03B1\u03C4\u03BF\u03C2",
             createdAt: '2022-10-20T10:15:00.000Z'
         },
         {
             id: '3',
-            name: "\u03A0\u03C1\u03BF\u03CA\u03CC\u03BD\u03C4\u03B1 \u03A0\u03C1\u03BF\u03C3\u03CE\u03C0\u03BF\u03C5",
+            name: "\u0395\u03B9\u03B4\u03B9\u03BA\u03AD\u03C2 \u0395\u03C6\u03B1\u03C1\u03BC\u03BF\u03B3\u03AD\u03C2",
             createdAt: '2022-10-20T10:30:00.000Z'
+        },
+        {
+            id: '4',
+            name: "\u0395\u03C1\u03B3\u03B1\u03BB\u03B5\u03AF\u03B1 \u0395\u03C6\u03B1\u03C1\u03BC\u03BF\u03B3\u03AE\u03C2",
+            createdAt: '2022-10-20T10:45:00.000Z'
         }
     ],
     // Sample sales
@@ -29157,17 +29232,17 @@ const initialData = {
                     type: 'service',
                     id: '1',
                     quantity: 1,
-                    price: 15.00
+                    price: 150.00
                 },
                 {
                     type: 'product',
                     id: '1',
                     quantity: 1,
-                    price: 12.50
+                    price: 89.50
                 }
             ],
-            total: 27.50,
-            paymentMethod: 'cash',
+            total: 239.50,
+            paymentMethod: 'card',
             date: '2023-07-01T11:30:00.000Z'
         },
         {
@@ -29179,16 +29254,16 @@ const initialData = {
                     type: 'service',
                     id: '3',
                     quantity: 1,
-                    price: 20.00
+                    price: 120.00
                 },
                 {
-                    type: 'service',
+                    type: 'product',
                     id: '4',
                     quantity: 1,
-                    price: 25.00
+                    price: 29.99
                 }
             ],
-            total: 45.00,
+            total: 149.99,
             paymentMethod: 'card',
             date: '2023-07-02T15:45:00.000Z'
         },
@@ -29201,18 +29276,62 @@ const initialData = {
                     type: 'service',
                     id: '2',
                     quantity: 1,
-                    price: 45.00
+                    price: 250.00
                 },
                 {
                     type: 'product',
                     id: '2',
                     quantity: 1,
-                    price: 14.00
+                    price: 45.00
                 }
             ],
-            total: 59.00,
+            total: 295.00,
             paymentMethod: 'card',
             date: '2023-07-03T14:20:00.000Z'
+        },
+        {
+            id: '4',
+            customerId: '1',
+            staffId: '3',
+            items: [
+                {
+                    type: 'service',
+                    id: '5',
+                    quantity: 1,
+                    price: 1500.00
+                },
+                {
+                    type: 'product',
+                    id: '5',
+                    quantity: 2,
+                    price: 120.00
+                }
+            ],
+            total: 1740.00,
+            paymentMethod: 'transfer',
+            date: '2023-07-05T10:15:00.000Z'
+        },
+        {
+            id: '5',
+            customerId: '2',
+            staffId: '4',
+            items: [
+                {
+                    type: 'service',
+                    id: '4',
+                    quantity: 1,
+                    price: 800.00
+                },
+                {
+                    type: 'product',
+                    id: '5',
+                    quantity: 1,
+                    price: 120.00
+                }
+            ],
+            total: 920.00,
+            paymentMethod: 'card',
+            date: '2023-07-07T13:45:00.000Z'
         }
     ],
     // Sample invoices
@@ -29225,22 +29344,22 @@ const initialData = {
                     type: 'service',
                     id: '1',
                     quantity: 1,
-                    price: 15.00
+                    price: 150.00
                 },
                 {
                     type: 'product',
                     id: '1',
                     quantity: 1,
-                    price: 12.50
+                    price: 89.50
                 }
             ],
-            subtotal: 27.50,
-            tax: 6.60,
-            total: 34.10,
+            subtotal: 239.50,
+            tax: 57.48,
+            total: 296.98,
             date: '2023-07-01T11:35:00.000Z',
             dueDate: '2023-07-15T00:00:00.000Z',
             status: 'paid',
-            notes: ''
+            notes: 'AUTO Ceramic Coating Basic + Ceramic Pro 9H'
         },
         {
             id: '2',
@@ -29250,22 +29369,22 @@ const initialData = {
                     type: 'service',
                     id: '3',
                     quantity: 1,
-                    price: 20.00
+                    price: 120.00
                 },
                 {
-                    type: 'service',
+                    type: 'product',
                     id: '4',
                     quantity: 1,
-                    price: 25.00
+                    price: 29.99
                 }
             ],
-            subtotal: 45.00,
-            tax: 10.80,
-            total: 55.80,
+            subtotal: 149.99,
+            tax: 36.00,
+            total: 185.99,
             date: '2023-07-02T15:50:00.000Z',
             dueDate: '2023-07-16T00:00:00.000Z',
             status: 'paid',
-            notes: ''
+            notes: 'MOTO Ceramic Coating'
         },
         {
             id: '3',
@@ -29275,22 +29394,72 @@ const initialData = {
                     type: 'service',
                     id: '2',
                     quantity: 1,
-                    price: 45.00
+                    price: 250.00
                 },
                 {
                     type: 'product',
                     id: '2',
                     quantity: 1,
-                    price: 14.00
+                    price: 45.00
                 }
             ],
-            subtotal: 59.00,
-            tax: 14.16,
-            total: 73.16,
+            subtotal: 295.00,
+            tax: 70.80,
+            total: 365.80,
             date: '2023-07-03T14:25:00.000Z',
             dueDate: '2023-07-17T00:00:00.000Z',
             status: 'unpaid',
-            notes: ''
+            notes: 'AUTO Ceramic Coating Premium'
+        },
+        {
+            id: '4',
+            customerId: '1',
+            items: [
+                {
+                    type: 'service',
+                    id: '5',
+                    quantity: 1,
+                    price: 1500.00
+                },
+                {
+                    type: 'product',
+                    id: '5',
+                    quantity: 2,
+                    price: 120.00
+                }
+            ],
+            subtotal: 1740.00,
+            tax: 417.60,
+            total: 2157.60,
+            date: '2023-07-05T10:20:00.000Z',
+            dueDate: '2023-07-19T00:00:00.000Z',
+            status: 'paid',
+            notes: "AVIATION Ceramic Coating \u03B3\u03B9\u03B1 \u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03CC \u03B1\u03B5\u03C1\u03BF\u03C3\u03BA\u03AC\u03C6\u03BF\u03C2"
+        },
+        {
+            id: '5',
+            customerId: '2',
+            items: [
+                {
+                    type: 'service',
+                    id: '4',
+                    quantity: 1,
+                    price: 800.00
+                },
+                {
+                    type: 'product',
+                    id: '5',
+                    quantity: 1,
+                    price: 120.00
+                }
+            ],
+            subtotal: 920.00,
+            tax: 220.80,
+            total: 1140.80,
+            date: '2023-07-07T13:50:00.000Z',
+            dueDate: '2023-07-21T00:00:00.000Z',
+            status: 'unpaid',
+            notes: "YACHT Ceramic Coating \u03B3\u03B9\u03B1 \u03C3\u03BA\u03AC\u03C6\u03BF\u03C2 12 \u03BC\u03AD\u03C4\u03C1\u03C9\u03BD"
         }
     ],
     // Sample reviews
@@ -29326,33 +29495,33 @@ const initialData = {
     // Application settings
     settings: {
         businessInfo: {
-            name: 'Beauty Salon',
-            address: "\u039B\u03B5\u03C9\u03C6\u03CC\u03C1\u03BF\u03C2 \u0391\u03BB\u03B5\u03BE\u03AC\u03BD\u03B4\u03C1\u03B1\u03C2 45, \u0391\u03B8\u03AE\u03BD\u03B1",
-            phone: '2101234567',
-            email: 'info@beautysalon.gr',
-            website: 'www.beautysalon.gr',
+            name: 'Ceramic Pro Studio',
+            address: "\u039B\u03B5\u03C9\u03C6\u03CC\u03C1\u03BF\u03C2 \u039C\u03B5\u03C3\u03BF\u03B3\u03B5\u03AF\u03C9\u03BD 265, \u0391\u03B8\u03AE\u03BD\u03B1",
+            phone: '2106547890',
+            email: 'info@ceramicprostudio.gr',
+            website: 'www.ceramicprostudio.gr',
             taxId: '123456789'
         },
         businessHours: {
             monday: {
                 open: '09:00',
-                close: '20:00'
+                close: '18:00'
             },
             tuesday: {
                 open: '09:00',
-                close: '20:00'
+                close: '18:00'
             },
             wednesday: {
                 open: '09:00',
-                close: '20:00'
+                close: '18:00'
             },
             thursday: {
                 open: '09:00',
-                close: '20:00'
+                close: '18:00'
             },
             friday: {
                 open: '09:00',
-                close: '20:00'
+                close: '18:00'
             },
             saturday: {
                 open: '10:00',
@@ -29365,7 +29534,7 @@ const initialData = {
         },
         notifications: {
             email: true,
-            sms: false,
+            sms: true,
             appointmentReminder: true,
             reminderTime: 24 // hours before appointment
         }
