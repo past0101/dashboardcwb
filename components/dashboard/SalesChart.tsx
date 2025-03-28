@@ -1,119 +1,129 @@
-import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js/auto';
-import { useTheme } from '@/context/ThemeContext';
-import { useData } from '@/context/DataContext';
+import React from 'react';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+  ChartOptions
+} from 'chart.js';
+import { SalesData } from '@/lib/types';
 
-const SalesChart: React.FC = () => {
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartInstance = useRef<Chart | null>(null);
-  const { theme } = useTheme();
-  const { salesData } = useData();
-  
-  useEffect(() => {
-    if (chartRef.current) {
-      const ctx = chartRef.current.getContext('2d');
-      
-      if (ctx) {
-        // Destroy previous chart if it exists
-        if (chartInstance.current) {
-          chartInstance.current.destroy();
-        }
-        
-        // Chart configuration
-        chartInstance.current = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: salesData.map(item => item.month),
-            datasets: [
-              {
-                label: 'Πωλήσεις (€)',
-                data: salesData.map(item => item.sales),
-                backgroundColor: 'rgba(0, 114, 255, 0.1)',
-                borderColor: 'rgba(0, 114, 255, 1)',
-                borderWidth: 2,
-                tension: 0.4,
-                fill: true,
-                pointBackgroundColor: 'rgba(0, 114, 255, 1)',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 6,
-                pointHoverBackgroundColor: 'rgba(0, 114, 255, 1)',
-                pointHoverBorderColor: '#fff',
-                pointHoverBorderWidth: 2,
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false,
-              },
-              tooltip: {
-                mode: 'index',
-                intersect: false,
-                backgroundColor: theme === 'dark' ? '#374151' : '#ffffff',
-                titleColor: theme === 'dark' ? '#ffffff' : '#111827',
-                bodyColor: theme === 'dark' ? '#e5e7eb' : '#4b5563',
-                borderColor: theme === 'dark' ? '#4b5563' : '#e5e7eb',
-                borderWidth: 1,
-                padding: 12,
-                boxPadding: 6,
-                usePointStyle: true,
-                callbacks: {
-                  label: function(context) {
-                    return `${context.parsed.y.toLocaleString()} €`;
-                  }
-                }
-              }
-            },
-            scales: {
-              x: {
-                grid: {
-                  display: false,
-                },
-                ticks: {
-                  color: theme === 'dark' ? '#9ca3af' : '#6b7280',
-                }
-              },
-              y: {
-                grid: {
-                  color: theme === 'dark' ? 'rgba(75, 85, 99, 0.2)' : 'rgba(229, 231, 235, 0.8)',
-                },
-                ticks: {
-                  color: theme === 'dark' ? '#9ca3af' : '#6b7280',
-                  callback: function(value) {
-                    return value + ' €';
-                  }
-                },
-                beginAtZero: true,
-              }
-            }
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
+
+interface SalesChartProps {
+  data?: SalesData[];
+}
+
+const SalesChart: React.FC<SalesChartProps> = ({ data = [] }) => {
+  const chartData = {
+    labels: data?.map(item => item.month) || [],
+    datasets: [
+      {
+        label: 'Πωλήσεις (€)',
+        data: data?.map(item => item.sales) || [],
+        fill: 'start',
+        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+        borderColor: 'rgba(99, 102, 241, 1)',
+        tension: 0.4,
+        pointRadius: 4,
+        pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+      }
+    ]
+  };
+
+  const options: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top' as const,
+        labels: {
+          usePointStyle: true,
+          boxWidth: 6,
+          font: {
+            size: 12
           }
-        });
+        }
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        backgroundColor: 'rgba(17, 24, 39, 0.9)',
+        padding: 12,
+        bodyFont: {
+          size: 13
+        },
+        titleFont: {
+          size: 14,
+          weight: 'bold'
+        },
+        callbacks: {
+          label: function(context) {
+            return `${context.dataset.label}: ${context.parsed.y.toLocaleString('el-GR')} €`;
+          }
+        }
       }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          font: {
+            size: 10
+          }
+        }
+      },
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: 'rgba(156, 163, 175, 0.1)'
+        },
+        ticks: {
+          font: {
+            size: 10
+          },
+          callback: function(value) {
+            return value.toLocaleString('el-GR') + ' €';
+          }
+        }
+      }
+    },
+    elements: {
+      line: {
+        borderWidth: 3
+      }
+    },
+    interaction: {
+      mode: 'nearest',
+      axis: 'x',
+      intersect: false
     }
-    
-    // Cleanup function
-    return () => {
-      if (chartInstance.current) {
-        chartInstance.current.destroy();
-      }
-    };
-  }, [salesData, theme]);
-  
+  };
+
   return (
-    <div className="card h-80">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-          Μηνιαίες Πωλήσεις
-        </h3>
-      </div>
-      <div className="h-64">
-        <canvas ref={chartRef} />
-      </div>
+    <div className="w-full h-full">
+      <Line data={chartData} options={options} />
     </div>
   );
 };
