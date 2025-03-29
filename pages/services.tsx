@@ -14,7 +14,7 @@ import {
 import { Service } from '@/lib/types';
 
 export default function Services() {
-  const { services, addService, updateService, deleteService } = useData();
+  const { services } = useData();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
@@ -87,58 +87,10 @@ export default function Services() {
     }));
   };
 
-  const handleAddServiceSubmit = (e: React.FormEvent) => {
+  const handleServiceSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate form data
-    if (newService.name && newService.description && newService.price && newService.duration) {
-      // Add the new service to context
-      addService({
-        name: newService.name,
-        description: newService.description,
-        price: parseFloat(newService.price),
-        duration: parseInt(newService.duration),
-        category: newService.category
-      });
-      
-      // Reset form and close modal
-      setNewService({
-        name: '',
-        description: '',
-        price: '',
-        duration: '',
-        category: 'AUTO',
-        technicians: '1'
-      });
-      setShowAddModal(false);
-    }
-  };
-  
-  const handleUpdateServiceSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (selectedService && newService.name && newService.description && newService.price && newService.duration) {
-      // Update the existing service
-      updateService(selectedService.id, {
-        name: newService.name,
-        description: newService.description,
-        price: parseFloat(newService.price),
-        duration: parseInt(newService.duration),
-        category: newService.category
-      });
-      
-      // Reset form and close modal
-      setSelectedService(null);
-      setNewService({
-        name: '',
-        description: '',
-        price: '',
-        duration: '',
-        category: 'AUTO',
-        technicians: '1'
-      });
-      setShowEditModal(false);
-    }
+    // Here would be the logic to actually add the service
+    setShowAddModal(false);
   };
 
   const handleEditService = (service: Service) => {
@@ -270,12 +222,6 @@ export default function Services() {
                         <button
                           type="button"
                           className="text-gray-400 hover:text-red-500 dark:hover:text-red-300"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (window.confirm(`Είστε βέβαιοι ότι θέλετε να διαγράψετε την υπηρεσία "${service.name}";`)) {
-                              deleteService(service.id);
-                            }
-                          }}
                         >
                           <TrashIcon className="h-5 w-5" />
                         </button>
@@ -475,7 +421,7 @@ export default function Services() {
                 </svg>
               </button>
             </div>
-            <form onSubmit={handleAddServiceSubmit} className="space-y-4">
+            <form onSubmit={handleServiceSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Όνομα Υπηρεσίας *
@@ -617,7 +563,7 @@ export default function Services() {
                 </svg>
               </button>
             </div>
-            <form onSubmit={handleUpdateServiceSubmit} className="space-y-4">
+            <form onSubmit={handleServiceSubmit} className="space-y-4">
               <div>
                 <label htmlFor="edit-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Όνομα Υπηρεσίας *
