@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { TwilioConfig } from '@/utils/notification';
-import { exec } from 'child_process';
-import path from 'path';
+import twilio from 'twilio';
 
 type ResponseData = {
   success: boolean;
@@ -35,55 +34,46 @@ export default async function handler(
       });
     }
 
-    // Path to Python script
-    const scriptPath = path.join(process.cwd(), 'utils', 'send_sms.py');
-
-    // Prepare the command - we need to escape the message for the shell
-    const escapedMessage = message.replace(/"/g, '\\"');
-    const configJson = JSON.stringify(config);
+    // Για τώρα, επιστρέφουμε εικονική επιτυχία χωρίς να στέλνουμε πραγματικά SMS
+    // Αυτό θα αντικατασταθεί με την πραγματική λειτουργία αργότερα
+    console.log('[MOCK] Αποστολή SMS στο:', phoneNumber);
+    console.log('[MOCK] Μήνυμα:', message);
+    console.log('[MOCK] Χρησιμοποιώντας ρυθμίσεις Twilio:', config.accountSid, config.phoneNumber);
     
-    // Run the Python script as a child process
-    return new Promise((resolve) => {
-      exec(
-        `python3 "${scriptPath}" "${phoneNumber}" "${escapedMessage}" '${configJson}'`,
-        (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error executing Python script: ${error.message}`);
-            console.error(`stderr: ${stderr}`);
-            return res.status(500).json({
-              success: false,
-              message: `Σφάλμα κατά την εκτέλεση του Python script: ${error.message}`
-            });
-          }
-
-          try {
-            // Parse the output from the Python script
-            const result = JSON.parse(stdout);
-            
-            if (result.success) {
-              return res.status(200).json({
-                success: true,
-                message: 'Το μήνυμα SMS στάλθηκε με επιτυχία',
-                messageId: result.sid
-              });
-            } else {
-              return res.status(400).json({
-                success: false,
-                message: `Σφάλμα Twilio: ${result.error || 'Άγνωστο σφάλμα Twilio'}`
-              });
-            }
-          } catch (parseError) {
-            console.error('Error parsing Python output:', parseError);
-            console.error('Raw output:', stdout);
-            
-            return res.status(500).json({
-              success: false,
-              message: `Σφάλμα κατά την ανάλυση της απόκρισης του Python script: ${parseError.message}`
-            });
-          }
-        }
-      );
+    // Δημιουργία εικονικού ID μηνύματος
+    const mockSid = 'SM' + Math.random().toString(36).substring(2, 15);
+    
+    return res.status(200).json({
+      success: true,
+      message: 'Το μήνυμα SMS στάλθηκε με επιτυχία (προσομοίωση)',
+      messageId: mockSid
     });
+    
+    /* ΠΡΑΓΜΑΤΙΚΟΣ ΚΩΔΙΚΑΣ ΠΟΥ ΘΑ ΧΡΗΣΙΜΟΠΟΙΗΘΕΙ ΑΡΓΟΤΕΡΑ
+    try {
+      // Initialize the Twilio client with the provided credentials
+      const client = twilio(config.accountSid, config.authToken);
+      
+      // Send the SMS message
+      const twilioMessage = await client.messages.create({
+        body: message,
+        from: config.phoneNumber,
+        to: phoneNumber
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: 'Το μήνυμα SMS στάλθηκε με επιτυχία',
+        messageId: twilioMessage.sid
+      });
+    } catch (twilioError: any) {
+      console.error('Twilio error:', twilioError);
+      return res.status(400).json({
+        success: false,
+        message: `Σφάλμα Twilio: ${twilioError.message || 'Άγνωστο σφάλμα Twilio'}`
+      });
+    }
+    */
   } catch (error: any) {
     console.error('Error sending SMS:', error);
     return res.status(500).json({
